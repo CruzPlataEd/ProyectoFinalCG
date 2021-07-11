@@ -50,15 +50,25 @@ const int LOOP_TIME = 1000 / FPS; // = 16 milisec // 1000 millisec == 1 sec
 double	deltaTime = 0.0f,
 lastFrame = 0.0f;
 
+
+
+
+
+
+
+double wasdf = 0.0f;
 //Lighting
 glm::vec3 lightPosition(0.0f, 4.0f, -10.0f);
 glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
 
 
 float tiempo = 0.0f;
+<<<<<<< HEAD
 int cero = 5;
 
 
+=======
+>>>>>>> 0f6cc9a447d73700e7f4a9c0d4acc7082f85ef6a
 
 
 void getResolution()
