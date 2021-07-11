@@ -55,8 +55,9 @@ glm::vec3 lightPosition(0.0f, 4.0f, -10.0f);
 glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
 
 
-float tiempo = 0.0f;
+int tiempo2 = 0;
 
+float tiempo = 0.0f;
 
 void getResolution()
 {
@@ -68,6 +69,7 @@ void getResolution()
 
 void animate(void)
 {
+
 	if (tiempo >= 0.0f and tiempo < 1.0f) {
 		tiempo += 0.01f;
 	}
