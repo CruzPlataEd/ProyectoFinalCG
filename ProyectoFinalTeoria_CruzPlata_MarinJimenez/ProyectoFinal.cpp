@@ -55,7 +55,7 @@ glm::vec3 lightPosition(0.0f, 4.0f, -10.0f);
 glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
 
 
-float tiempo = 0.0f;
+int numero = 23;
 
 
 void getResolution()
@@ -134,7 +134,7 @@ int main()
 	Shader animShader("Shaders/anim.vs", "Shaders/anim.fs");
 
 
-	//Aquí se colocan las imagenes que irán en el skybox
+	//Aquï¿½ se colocan las imagenes que irï¿½n en el skybox
 	vector<std::string> x{};
 
 	vector<std::string> faces1
@@ -266,7 +266,7 @@ int main()
 		animShader.setVec3("viewPos", camera.Position);
 
 
-		//Animación del personaje
+		//Animaciï¿½n del personaje
 		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(-40.3f, 1.75f, 0.3f)); // translate it down so it's at the center of the scene
 		model = glm::scale(model, glm::vec3(1.2f));	// it's a bit too big for our scene, so scale it down
 		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -305,7 +305,7 @@ int main()
 	
 
 		// -------------------------------------------------------------------------------------------------------------------------
-		// Caja Transparente --- Siguiente Práctica
+		// Caja Transparente --- Siguiente Prï¿½ctica
 		// -------------------------------------------------------------------------------------------------------------------------
 		/*glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
