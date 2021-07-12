@@ -56,6 +56,7 @@ glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
 
 float tiempo = 0.0f;
 int cero = 5;
+int dos = 2;
 
 void getResolution()
 {
