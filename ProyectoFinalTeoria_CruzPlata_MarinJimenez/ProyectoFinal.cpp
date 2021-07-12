@@ -55,8 +55,7 @@ glm::vec3 lightPosition(0.0f, 4.0f, -10.0f);
 glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
 
 float tiempo = 0.0f;
-int cero = 5;
-int dos = 2;
+bool bandera = true;
 
 void getResolution()
 {
@@ -69,14 +68,20 @@ void getResolution()
 void animate(void)
 {
 
-	if (tiempo >= 0.0f and tiempo < 1.0f) {
-		tiempo += 0.01f;
+	if (tiempo >= 0.0f and tiempo < 1.5f and bandera == true) {
+		tiempo += 0.001f;
 	}
-	if (tiempo >= 1.0f and tiempo < 2.0f) {
-		tiempo += 0.01f;
+	if (tiempo >= 1.5f and bandera == true) {
+		bandera = false;
+		tiempo -= 0.001f;
 	}
-	if (tiempo >= 2.0f)
-		tiempo -= 2.0f;
+	if (tiempo >= 0.0f and tiempo < 1.5f and bandera == false) {
+		tiempo -= 0.001f;
+	}
+	if (tiempo <= 0.0f and bandera == false) {
+		bandera = true;
+		tiempo += 0.001f;
+	}
 }
 
 int main()
