@@ -307,7 +307,7 @@ int main()
 		//casaDoll.Draw(staticShader);  Cambiamos esta linea y la remplazamos
 
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		staticShader.setMat4("model", model);
 		piso.Draw(staticShader);
