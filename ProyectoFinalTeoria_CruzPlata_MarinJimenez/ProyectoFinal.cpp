@@ -70,24 +70,22 @@ void animate(void)
 {
 
 	if (tiempoLuz >= 0.0f and tiempoLuz < 1.5f and bandera == true) {
-		tiempoLuz += 0.0001f;
-		if (tiempoLuz >= 0.7f)
+		tiempoLuz += 0.0005f;
+		if (tiempoLuz >= 1.2f)
 			cambiobox = 1;  //Dia
 	}
 	if (tiempoLuz >= 1.5f and bandera == true) {
 		bandera = false;
-		tiempoLuz -= 0.0001f;
+		tiempoLuz -= 0.0005f;
 	}
 	if (tiempoLuz >= 0.0f and tiempoLuz < 1.5f and bandera == false) {
-		tiempoLuz -= 0.0001f;
-		if (tiempoLuz <= 1.0f and tiempoLuz>0.5f)
-			cambiobox = 2;  //Anochecer
-		if (tiempoLuz <= 0.5f)
-			cambiobox = 3;
+		tiempoLuz -= 0.0005f;
+		if (tiempoLuz <= 0.7f)
+			cambiobox = 2;  //Noche
 	}
 	if (tiempoLuz <= 0.0f and bandera == false) {
 		bandera = true;
-		tiempoLuz += 0.0001f;
+		tiempoLuz += 0.0005f;
 	}
 }
 
@@ -181,8 +179,7 @@ int main()
 
 	Skybox skybox1 = Skybox(faces1);
 	Skybox skybox2 = Skybox(faces2);
-	Skybox skybox3 = Skybox(faces1);
-	Skybox skybox4 = Skybox(faces4);
+	Skybox skybox3 = Skybox(faces4);
 
 	
 	// Shader configuration
@@ -191,7 +188,6 @@ int main()
 	skyboxShader.setInt("skybox1", 0);
 	skyboxShader.setInt("skybox2", 0);
 	skyboxShader.setInt("skybox3", 0);
-	skyboxShader.setInt("skybox4", 0);
 
 	// load models
 	// -----------
@@ -377,10 +373,6 @@ int main()
 			skybox2.Terminate();
 			skybox3.Draw(skyboxShader, view, projection, camera);
 		}
-		if (cambiobox == 3) {
-			skybox3.Terminate();
-			skybox4.Draw(skyboxShader, view, projection, camera);
-		}
 		
 
 		// Limitar el framerate a 60
@@ -400,7 +392,6 @@ int main()
 	skybox1.Terminate();
 	skybox2.Terminate();
 	skybox3.Terminate();
-	skybox4.Terminate();
 
 	glfwTerminate();
 	return 0;
