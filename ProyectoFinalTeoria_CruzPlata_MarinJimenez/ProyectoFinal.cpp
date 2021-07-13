@@ -54,8 +54,9 @@ lastFrame = 0.0f;
 glm::vec3 lightPosition(0.0f, 4.0f, -10.0f);
 glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
 
-float tiempo = 0.0f;
+float tiempoLuz = 0.0f;
 bool bandera = true;
+int cambiobox = 0;
 
 void getResolution()
 {
@@ -68,19 +69,25 @@ void getResolution()
 void animate(void)
 {
 
-	if (tiempo >= 0.0f and tiempo < 1.5f and bandera == true) {
-		tiempo += 0.001f;
+	if (tiempoLuz >= 0.0f and tiempoLuz < 1.5f and bandera == true) {
+		tiempoLuz += 0.0001f;
+		if (tiempoLuz >= 0.7f)
+			cambiobox = 1;  //Dia
 	}
-	if (tiempo >= 1.5f and bandera == true) {
+	if (tiempoLuz >= 1.5f and bandera == true) {
 		bandera = false;
-		tiempo -= 0.001f;
+		tiempoLuz -= 0.0001f;
 	}
-	if (tiempo >= 0.0f and tiempo < 1.5f and bandera == false) {
-		tiempo -= 0.001f;
+	if (tiempoLuz >= 0.0f and tiempoLuz < 1.5f and bandera == false) {
+		tiempoLuz -= 0.0001f;
+		if (tiempoLuz <= 1.0f and tiempoLuz>0.5f)
+			cambiobox = 2;  //Anochecer
+		if (tiempoLuz <= 0.5f)
+			cambiobox = 3;
 	}
-	if (tiempo <= 0.0f and bandera == false) {
+	if (tiempoLuz <= 0.0f and bandera == false) {
 		bandera = true;
-		tiempo += 0.001f;
+		tiempoLuz += 0.0001f;
 	}
 }
 
@@ -141,45 +148,50 @@ int main()
 
 
 	//Aqu� se colocan las imagenes que ir�n en el skybox
-	vector<std::string> x{};
 
-	vector<std::string> faces1
+	vector<std::string> faces1  //Amanecer
 	{
-		"resources/skybox/AtardecerRight.jpg",
-		"resources/skybox/AtardecerLeft.jpg",
-		"resources/skybox/AtardecerTop.jpg",
-		"resources/skybox/AtardecerBottom.jpg",
-		"resources/skybox/AtardecerFront.jpg",
-		"resources/skybox/AtardecerBack.jpg"
+		"resources/skybox/AnochecerRight.jpg",
+		"resources/skybox/AnochecerLeft.jpg",
+		"resources/skybox/AnochecerTop.jpg",
+		"resources/skybox/AnochecerBottom.jpg",
+		"resources/skybox/AnochecerFront.jpg",
+		"resources/skybox/AnochecerBack.jpg"
 	};
 
-	vector<std::string> faces2
+	vector<std::string> faces2  //Dia
 	{
-		"resources/skybox/right.jpg",
-		"resources/skybox/left.jpg",
-		"resources/skybox/top.jpg",
-		"resources/skybox/bottom.jpg",
-		"resources/skybox/front.jpg",
-		"resources/skybox/back.jpg"
+		"resources/skybox/DiaRight.jpg",
+		"resources/skybox/DiaLeft.jpg",
+		"resources/skybox/DiaTop.jpg",
+		"resources/skybox/DiaBottom.jpg",
+		"resources/skybox/DiaFront.jpg",
+		"resources/skybox/DiaBack.jpg"
 	};
 
+	vector<std::string> faces4  //Noche
+	{
+		"resources/skybox/NocheRight.jpg",
+		"resources/skybox/NocheLeft.jpg",
+		"resources/skybox/NocheTop.jpg",
+		"resources/skybox/NocheBottom.jpg",
+		"resources/skybox/NocheFront.jpg",
+		"resources/skybox/NocheBack.jpg"
+	};
+
+	Skybox skybox1 = Skybox(faces1);
+	Skybox skybox2 = Skybox(faces2);
+	Skybox skybox3 = Skybox(faces1);
+	Skybox skybox4 = Skybox(faces4);
+
 	
-
-	if (tiempo >= 0.0f and tiempo < 100.0f) {
-		x = faces1;
-	}
-	if (tiempo >= 100.0f and tiempo < 200.0f) {
-		x = faces2;
-	}
-
-	Skybox skybox = Skybox(x);
-
-	
-
 	// Shader configuration
 	// --------------------
 	skyboxShader.use();
-	skyboxShader.setInt("skybox", 0);
+	skyboxShader.setInt("skybox1", 0);
+	skyboxShader.setInt("skybox2", 0);
+	skyboxShader.setInt("skybox3", 0);
+	skyboxShader.setInt("skybox4", 0);
 
 	// load models
 	// -----------
@@ -196,9 +208,8 @@ int main()
 	// -----------
 	while (!glfwWindowShouldClose(window))
 	{
+		skyboxShader.use();
 		animate();
-
-		skyboxShader.setInt("skybox", 0);
 
 		// per-frame time logic
 		// --------------------
@@ -219,7 +230,7 @@ int main()
 		//Fuente de luz direccional (Trata de ser una fuente de luz parecida al sol)
 		staticShader.setVec3("viewPos", camera.Position);
 		staticShader.setVec3("dirLight.direction", lightDirection);
-		staticShader.setVec3("dirLight.ambient", glm::vec3(0.0f+tiempo, 0.0f+tiempo, 0.0f+tiempo));
+		staticShader.setVec3("dirLight.ambient", glm::vec3(0.0f+tiempoLuz, 0.0f+tiempoLuz, 0.0f+tiempoLuz));
 		staticShader.setVec3("dirLight.diffuse", glm::vec3(0.0f, 0.0f, 0.0f));
 		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
 
@@ -347,7 +358,23 @@ int main()
 		// draw skybox as last
 		// -------------------
 		skyboxShader.use();
-		skybox.Draw(skyboxShader, view, projection, camera);
+		
+		if (cambiobox == 0) {
+			skybox1.Draw(skyboxShader, view, projection, camera);
+		}
+		if (cambiobox == 1) {
+			skybox1.Terminate();
+			skybox2.Draw(skyboxShader, view, projection, camera);
+		}
+		if (cambiobox == 2) {
+			skybox2.Terminate();
+			skybox3.Draw(skyboxShader, view, projection, camera);
+		}
+		if (cambiobox == 3) {
+			skybox3.Terminate();
+			skybox4.Draw(skyboxShader, view, projection, camera);
+		}
+		
 
 		// Limitar el framerate a 60
 		deltaTime = SDL_GetTicks() - lastFrame; // time for full 1 loop
@@ -363,7 +390,10 @@ int main()
 		glfwPollEvents();
 	}
 
-	skybox.Terminate();
+	skybox1.Terminate();
+	skybox2.Terminate();
+	skybox3.Terminate();
+	skybox4.Terminate();
 
 	glfwTerminate();
 	return 0;
