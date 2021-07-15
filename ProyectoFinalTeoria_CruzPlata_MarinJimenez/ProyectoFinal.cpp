@@ -7,6 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>	//camera y model
 #include <glm/gtc/type_ptr.hpp>
 #include <time.h>
+#include <camera.h>
 
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -16,7 +17,6 @@
 #include <SDL/SDL.h>
 
 #include <shader_m.h>
-#include <camera.h>
 #include <modelAnim.h>
 #include <model.h>
 #include <Skybox.h>
@@ -57,10 +57,17 @@ lastFrame = 0.0f;
 glm::vec3 lightPosition(0.0f, 4.0f, -10.0f);
 glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
 
+float x = 0.0f,
+y = 0.0f,
+z = 0.0f;
+glm::vec3 CamaraPersona(x, y, z);
+
 float tiempoLuz = 0.0f;
 bool bandera = true;
 int cambiobox = 0;
-bool terceraPersona = true;
+bool terceraPersona = true,
+guardado = false,
+finish = false;
 
 void getResolution()
 {
@@ -71,25 +78,45 @@ void getResolution()
 }
 
 void cambioCamara(void) {
-	if (terceraPersona == false) {
-		if (CamaraX < 0.5f) {
-			CamaraX += 0.2f;
+	if (terceraPersona == false and finish == false) {
+		if (guardado == false) {
+			CamaraX = camera.Position.x;
+			CamaraY = camera.Position.y;
+			CamaraZ = camera.Position.z;
+			CamaraPersona = camera.Position;
+			guardado = true;
 		}
-		if (CamaraX > 0.5f) {
-			CamaraX -= 0.2f;
-		}
-		if (CamaraZ < 0.5f) {
-			CamaraZ += 0.2f;
-		}
-		if (CamaraZ > 0.5f) {
-			CamaraZ -= 0.2f;
-		}
-		if (CamaraY < 100.0f) {
+		if (CamaraX < 0.0f) 
+			CamaraX += 2.0f;
+		if (CamaraX > 5.0f)
+			CamaraX -= 2.0f;
+		if (CamaraZ < 0.0f)
+			CamaraZ += 2.0f;
+		if (CamaraZ > 5.0f)
+			CamaraZ -= 2.0f;
+		if (CamaraY < 350.0f)
 			CamaraY += 1.0f;
-		}
-		if (CamaraY > 100.0f) {
+		if (CamaraX<=5.0f and CamaraX>=0.0f and CamaraZ<=5.0f and CamaraZ>=0.0f and CamaraY >= 350.0f)
+			finish = true;
+		camera.Position = glm::vec3(CamaraX, CamaraY, CamaraZ);
+	}
+	if (terceraPersona == true and guardado == true) {
+
+		if (CamaraX < CamaraPersona.x)
+			CamaraX += 1.0f;
+		if (CamaraX > CamaraPersona.x)
+			CamaraX -= 1.0f;
+		if (CamaraZ < CamaraPersona.z)
+			CamaraZ += 1.0f;
+		if (CamaraZ > CamaraPersona.z)
+			CamaraZ -= 1.0f;
+		if (CamaraY > CamaraPersona.y)
 			CamaraY -= 1.0f;
+		if (CamaraX <= CamaraPersona.x and CamaraX >= CamaraPersona.x and CamaraZ <= CamaraPersona.z and CamaraZ >= CamaraPersona.z and CamaraY <= CamaraPersona.y){
+			guardado = false;
+			finish = false;
 		}
+		camera.Position = glm::vec3(CamaraX, CamaraY, CamaraZ);
 	}
 }
 
@@ -441,10 +468,15 @@ void my_input(GLFWwindow *window, int key, int scancode, int action, int mode)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera.ProcessKeyboard(FORWARD, (float)deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera.ProcessKeyboard(BACKWARD, (float)deltaTime);
+
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+		if (terceraPersona == true)
+			camera.ProcessKeyboard(FORWARD, (float)deltaTime);
+	}
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){ 
+		if (terceraPersona == true)
+			camera.ProcessKeyboard(BACKWARD, (float)deltaTime);
+	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 		camera.ProcessKeyboard(LEFT, (float)deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
@@ -491,7 +523,16 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	lastX = xpos;
 	lastY = ypos;
 
-	camera.ProcessMouseMovement(xoffset, yoffset);
+	if (terceraPersona == true) {
+		if (guardado == true) {
+			camera.Pitch = 0.0f;
+			camera.Yaw = -90.0f;
+		}
+		else
+			camera.ProcessMouseMovement(xoffset, 0);
+	}
+	if (terceraPersona == false)
+		camera.ProcessMouseMovement(xoffset, -90);
 }
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
