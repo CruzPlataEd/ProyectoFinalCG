@@ -38,8 +38,8 @@ GLFWmonitor *monitors;
 void getResolution(void);
 
 // camera
-Camera camera(glm::vec3(0.0f, 100.0f, 450.0f));
-float MovementSpeed = 2.0f;
+Camera camera(glm::vec3(0.0f, 20.0f, 450.0f));
+float MovementSpeed = 10.0f;
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -103,8 +103,6 @@ int main()
 #endif
 
 	// glfw window creation
-	// --------------------
-	// --------------------
 	monitors = glfwGetPrimaryMonitor();
 	getResolution();
 
@@ -145,7 +143,7 @@ int main()
 	Shader animShader("Shaders/anim.vs", "Shaders/anim.fs");
 
 
-	//Aqu� se colocan las imagenes que ir�n en el skybox
+	//Aqui se colocan las imagenes que iran en el skybox
 
 	vector<std::string> faces1  //Amanecer
 	{
@@ -311,7 +309,6 @@ int main()
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		casaModerna.Draw(staticShader);
-		//casaDoll.Draw(staticShader);  Cambiamos esta linea y la remplazamos
 
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
