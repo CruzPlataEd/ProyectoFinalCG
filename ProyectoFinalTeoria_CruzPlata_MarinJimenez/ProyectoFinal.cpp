@@ -194,9 +194,10 @@ int main()
 	Model piso("resources/objects/piso/piso.obj");
 	Model casaModerna("resources/objects/CasaModerna/Farm_house.obj");
 	Model calle_M("resources/objects/piso/calle.obj");
-	//Model calle2_M("resources/objects/piso/calle2.obj");
-	Model calleBanqueta_M("resources/objects/piso/calles_banquetas.obj");
+	Model calleBanqueta_M("resources/objects/piso/calles_banquetas_unosolo.obj");
 	Model paredes_M("resources/objects/Paredes/paredes.obj");
+	Model allbotebasura_M("resources/objects/mobiliario/all_botesbasura.obj");
+	Model allbancas_M("resources/objects/Bancas/all_bancas.obj");
 	//Model arbol1_M("resources/objects/plantas/Tree_OBJ.obj");
 
 	// draw in wireframe
@@ -319,12 +320,11 @@ int main()
 		staticShader.setMat4("model", model);
 		piso.Draw(staticShader);
 
-
-		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 450.0f));
+		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 450.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
-		calle_M.Draw(staticShader);
+		calle_M.Draw(staticShader);*/
 
 		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
@@ -343,6 +343,18 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		paredes_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		allbotebasura_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		allbancas_M.Draw(staticShader);
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Caja Transparente --- Siguiente Pr�ctica
 		// -------------------------------------------------------------------------------------------------------------------------
