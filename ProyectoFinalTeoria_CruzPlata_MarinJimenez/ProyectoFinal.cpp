@@ -36,9 +36,12 @@ unsigned int SCR_HEIGHT = 600;
 GLFWmonitor *monitors;
 
 void getResolution(void);
+float CamaraX = 0.0f,
+CamaraY = 20.0f,
+CamaraZ = 450.0f;
 
 // camera
-Camera camera(glm::vec3(0.0f, 20.0f, 450.0f));
+Camera camera(glm::vec3(CamaraX, CamaraY, CamaraZ));
 float MovementSpeed = 10.0f;
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
@@ -57,6 +60,7 @@ glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
 float tiempoLuz = 0.0f;
 bool bandera = true;
 int cambiobox = 0;
+bool terceraPersona = true;
 
 void getResolution()
 {
@@ -64,6 +68,29 @@ void getResolution()
 
 	SCR_WIDTH = mode->width;
 	SCR_HEIGHT = (mode->height) - 80;
+}
+
+void cambioCamara(void) {
+	if (terceraPersona == false) {
+		if (CamaraX < 0.5f) {
+			CamaraX += 0.2f;
+		}
+		if (CamaraX > 0.5f) {
+			CamaraX -= 0.2f;
+		}
+		if (CamaraZ < 0.5f) {
+			CamaraZ += 0.2f;
+		}
+		if (CamaraZ > 0.5f) {
+			CamaraZ -= 0.2f;
+		}
+		if (CamaraY < 100.0f) {
+			CamaraY += 1.0f;
+		}
+		if (CamaraY > 100.0f) {
+			CamaraY -= 1.0f;
+		}
+	}
 }
 
 void animate(void)
@@ -207,6 +234,7 @@ int main()
 	{
 		skyboxShader.use();
 		animate();
+		cambioCamara();
 
 		// per-frame time logic
 		// --------------------
@@ -426,6 +454,12 @@ void my_input(GLFWwindow *window, int key, int scancode, int action, int mode)
 		lightPosition.x++;
 	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
 		lightPosition.x--;
+
+	//Camara aerea y tercera persona
+	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
+		terceraPersona = false;
+	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+		terceraPersona = true;
 
 	
 }
