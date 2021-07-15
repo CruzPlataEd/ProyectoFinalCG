@@ -192,6 +192,7 @@ int main()
 	// load models
 	// -----------
 	Model piso("resources/objects/piso/piso.obj");
+	Model escenario_M("resources/objects/piso/textura_escenario.obj");
 	Model casaModerna("resources/objects/CasaModerna/Farm_house.obj");
 	Model calle_M("resources/objects/piso/calle.obj");
 	Model calleBanqueta_M("resources/objects/piso/calles_banquetas_unosolo.obj");
@@ -320,17 +321,17 @@ int main()
 		staticShader.setMat4("model", model);
 		piso.Draw(staticShader);
 
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		escenario_M.Draw(staticShader);
+
 		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 450.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		calle_M.Draw(staticShader);*/
-
-		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.2f));
-		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		staticShader.setMat4("model", model);
-		calle2_M.Draw(staticShader);*/
 
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
