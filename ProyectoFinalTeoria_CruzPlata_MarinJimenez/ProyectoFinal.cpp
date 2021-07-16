@@ -101,7 +101,6 @@ void cambioCamara(void) {
 		camera.Position = glm::vec3(CamaraX, CamaraY, CamaraZ);
 	}
 	if (terceraPersona == true and guardado == true) {
-
 		if (CamaraX < CamaraPersona.x)
 			CamaraX += 1.0f;
 		if (CamaraX > CamaraPersona.x)
@@ -115,6 +114,7 @@ void cambioCamara(void) {
 		if (CamaraX <= CamaraPersona.x and CamaraX >= CamaraPersona.x and CamaraZ <= CamaraPersona.z and CamaraZ >= CamaraPersona.z and CamaraY <= CamaraPersona.y){
 			guardado = false;
 			finish = false;
+
 		}
 		camera.Position = glm::vec3(CamaraX, CamaraY, CamaraZ);
 	}
@@ -251,7 +251,6 @@ int main()
 	Model paredes_M("resources/objects/Paredes/paredes.obj");
 	Model allbotebasura_M("resources/objects/mobiliario/all_botesbasura.obj");
 	Model allbancas_M("resources/objects/Bancas/all_bancas.obj");
-	//Model arbol1_M("resources/objects/plantas/Tree_OBJ.obj");
 
 	// draw in wireframe
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -408,6 +407,7 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		allbancas_M.Draw(staticShader);
+
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Caja Transparente --- Siguiente Pr�ctica
 		// -------------------------------------------------------------------------------------------------------------------------
