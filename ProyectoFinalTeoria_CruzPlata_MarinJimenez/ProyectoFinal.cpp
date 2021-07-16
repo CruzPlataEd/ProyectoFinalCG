@@ -57,6 +57,7 @@ lastFrame = 0.0f;
 glm::vec3 lightPosition(0.0f, 4.0f, -10.0f);
 glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
 
+int i = 0;
 float x = 0.0f,
 y = 0.0f,
 z = 0.0f;
@@ -101,6 +102,12 @@ void cambioCamara(void) {
 		camera.Position = glm::vec3(CamaraX, CamaraY, CamaraZ);
 	}
 	if (terceraPersona == true and guardado == true) {
+		if (i==0){
+			CamaraX = camera.Position.x;
+			CamaraY = camera.Position.y;
+			CamaraZ = camera.Position.z;
+			i = 1;
+		}
 		if (CamaraX < CamaraPersona.x)
 			CamaraX += 1.0f;
 		if (CamaraX > CamaraPersona.x)
@@ -114,7 +121,6 @@ void cambioCamara(void) {
 		if (CamaraX <= CamaraPersona.x and CamaraX >= CamaraPersona.x and CamaraZ <= CamaraPersona.z and CamaraZ >= CamaraPersona.z and CamaraY <= CamaraPersona.y){
 			guardado = false;
 			finish = false;
-
 		}
 		camera.Position = glm::vec3(CamaraX, CamaraY, CamaraZ);
 	}
@@ -251,6 +257,9 @@ int main()
 	Model paredes_M("resources/objects/Paredes/paredes.obj");
 	Model allbotebasura_M("resources/objects/mobiliario/all_botesbasura.obj");
 	Model allbancas_M("resources/objects/Bancas/all_bancas.obj");
+	Model caseta_M("resources/objects/caseta/caseta.obj");
+	Model casa("resources/objects/casa/new_house.obj");
+	//Model arbol1_M("resources/objects/plantas/Tree_OBJ.obj");
 
 	// draw in wireframe
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -361,10 +370,10 @@ int main()
 		staticShader.setMat4("projection", projection);
 		staticShader.setMat4("view", view);
 
-		model = glm::translate(glm::mat4(1.0f), glm::vec3(100.0f, 0.0f, 0.0f));
+		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(100.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
-		casaModerna.Draw(staticShader);
+		casaModerna.Draw(staticShader);*/
 
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
@@ -407,6 +416,18 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		allbancas_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		caseta_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		casa.Draw(staticShader);
 
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Caja Transparente --- Siguiente Pr�ctica
