@@ -57,6 +57,7 @@ lastFrame = 0.0f;
 glm::vec3 lightPosition(0.0f, 4.0f, -10.0f);
 glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
 
+int i = 0;
 float x = 0.0f,
 y = 0.0f,
 z = 0.0f;
@@ -101,7 +102,6 @@ void cambioCamara(void) {
 		camera.Position = glm::vec3(CamaraX, CamaraY, CamaraZ);
 	}
 	if (terceraPersona == true and guardado == true) {
-
 		if (CamaraX < CamaraPersona.x)
 			CamaraX += 1.0f;
 		if (CamaraX > CamaraPersona.x)
@@ -253,6 +253,7 @@ int main()
 	Model allbancas_M("resources/objects/bancas/all_bancas.obj");
 	Model caseta_M("resources/objects/caseta/caseta.obj");
 	Model casa_M("resources/objects/casa/all_casa.obj");
+	Model casa("resources/objects/Casa/new_house.obj");
 	//Model arbol1_M("resources/objects/plantas/Tree_OBJ.obj");
 
 	// draw in wireframe
@@ -364,10 +365,10 @@ int main()
 		staticShader.setMat4("projection", projection);
 		staticShader.setMat4("view", view);
 
-		model = glm::translate(glm::mat4(1.0f), glm::vec3(100.0f, 0.0f, 0.0f));
+		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(100.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
-		casaModerna.Draw(staticShader);
+		casaModerna.Draw(staticShader);*/
 
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
@@ -422,6 +423,13 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		casa_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(-30.0f, 50.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f,10.0f,5.0f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		casa.Draw(staticShader);
+
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Caja Transparente --- Siguiente Pr�ctica
 		// -------------------------------------------------------------------------------------------------------------------------
