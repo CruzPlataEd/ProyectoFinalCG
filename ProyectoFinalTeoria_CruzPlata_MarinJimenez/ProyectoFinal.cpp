@@ -253,7 +253,7 @@ int main()
 	Model allbancas_M("resources/objects/bancas/all_bancas.obj");
 	Model caseta_M("resources/objects/caseta/caseta.obj");
 	Model casa_M("resources/objects/casa/all_casa.obj");
-	Model casa("resources/objects/Casa/new_house.obj");
+	Model casa("resources/objects/mansion/new_house.obj");
 	//Model arbol1_M("resources/objects/plantas/Tree_OBJ.obj");
 
 	// draw in wireframe
@@ -374,7 +374,7 @@ int main()
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		staticShader.setMat4("model", model);
-		piso.Draw(staticShader);
+		//piso.Draw(staticShader);
 
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
@@ -424,8 +424,8 @@ int main()
 		staticShader.setMat4("model", model);
 		casa_M.Draw(staticShader);
 
-		model = glm::translate(glm::mat4(1.0f), glm::vec3(-30.0f, 50.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f,10.0f,5.0f));
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.0f, 150.0f));
+		model = glm::scale(model, glm::vec3(0.3f,0.4f,0.3f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		casa.Draw(staticShader);
