@@ -248,9 +248,9 @@ int main()
 	Model casaModerna("resources/objects/CasaModerna/Farm_house.obj");
 	Model calle_M("resources/objects/piso/calle.obj");
 	Model calleBanqueta_M("resources/objects/piso/calles_banquetas_unosolo.obj");
-	Model paredes_M("resources/objects/Paredes/paredes.obj");
+	Model paredes_M("resources/objects/paredes/paredes.obj");
 	Model allbotebasura_M("resources/objects/mobiliario/all_botesbasura.obj");
-	Model allbancas_M("resources/objects/Bancas/all_bancas.obj");
+	Model allbancas_M("resources/objects/bancas/all_bancas.obj");
 	Model caseta_M("resources/objects/caseta/caseta.obj");
 	Model casa_M("resources/objects/casa/all_casa.obj");
 	//Model arbol1_M("resources/objects/plantas/Tree_OBJ.obj");
