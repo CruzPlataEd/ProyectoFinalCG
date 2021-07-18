@@ -249,6 +249,7 @@ int main()
 	Model calle_M("resources/objects/piso/calle.obj");
 	Model calleBanqueta_M("resources/objects/piso/calles_banquetas_unosolo.obj");
 	Model paredes_M("resources/objects/paredes/paredes.obj");
+	Model paredes2_M("resources/objects/paredes/paredes2.obj");
 	Model allbotebasura_M("resources/objects/mobiliario/all_botesbasura.obj");
 	Model allbancas_M("resources/objects/bancas/all_bancas.obj");
 	Model caseta_M("resources/objects/caseta/caseta.obj");
@@ -403,6 +404,12 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		paredes_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		paredes2_M.Draw(staticShader);
 
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
