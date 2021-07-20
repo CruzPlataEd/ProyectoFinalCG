@@ -1,7 +1,7 @@
 # Blender MTL File: 'proyecto_paredes.blend'
 # Material Count: 8
 
-newmtl Material.068
+newmtl Material
 Ns 225.000000
 Ka 1.000000 1.000000 1.000000
 Kd 0.800000 0.800000 0.800000
@@ -12,7 +12,7 @@ d 1.000000
 illum 2
 map_Kd pared_textura.jpg
 
-newmtl Material.069
+newmtl Material.002
 Ns 225.000000
 Ka 1.000000 1.000000 1.000000
 Kd 0.800000 0.800000 0.800000
@@ -23,7 +23,29 @@ d 1.000000
 illum 2
 map_Kd pared_textura.jpg
 
-newmtl Material.070
+newmtl Material.004
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd pared_textura.jpg
+
+newmtl Material.006
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd pared_textura.jpg
+
+newmtl Material.018
 Ns 225.000000
 Ka 1.000000 1.000000 1.000000
 Kd 0.800000 0.800000 0.800000
@@ -45,18 +67,6 @@ d 1.000000
 illum 2
 map_Kd pared_textura.jpg
 
-newmtl cement.008
-Ns 10.000002
-Ka 1.000000 1.000000 1.000000
-Kd 0.588000 0.588000 0.588000
-Ks 0.090000 0.090000 0.090000
-Ke 0.000000 0.000000 0.000000
-Ni 1.500000
-d 1.000000
-illum 2
-map_Bump -bm 0.300000 C:\\Bump.tga
-map_Kd pared_textura.jpg
-
 newmtl column.007
 Ns 10.000002
 Ka 1.000000 1.000000 1.000000
@@ -70,18 +80,6 @@ map_Bump -bm 0.300000 C:\\Bump.tga
 map_Kd pared_textura.jpg
 
 newmtl wall.007
-Ns 10.000002
-Ka 1.000000 1.000000 1.000000
-Kd 0.588000 0.588000 0.588000
-Ks 0.090000 0.090000 0.090000
-Ke 0.000000 0.000000 0.000000
-Ni 1.500000
-d 1.000000
-illum 2
-map_Bump -bm 0.300000 C:\\Bump.tga
-map_Kd pared_textura.jpg
-
-newmtl wall.008
 Ns 10.000002
 Ka 1.000000 1.000000 1.000000
 Kd 0.588000 0.588000 0.588000

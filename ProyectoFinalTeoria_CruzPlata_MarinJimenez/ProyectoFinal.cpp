@@ -248,12 +248,23 @@ int main()
 	Model casaModerna("resources/objects/CasaModerna/Farm_house.obj");
 	Model calle_M("resources/objects/piso/calle.obj");
 	Model calleBanqueta_M("resources/objects/piso/calles_banquetas_unosolo.obj");
-	Model paredes_M("resources/objects/Paredes/paredes.obj");
+	Model paredes_M("resources/objects/paredes/paredes.obj");
+	Model paredes2_M("resources/objects/paredes/paredes2.obj");
 	Model allbotebasura_M("resources/objects/mobiliario/all_botesbasura.obj");
-	Model allbancas_M("resources/objects/Bancas/all_bancas.obj");
+	Model allbotebasura2_M("resources/objects/mobiliario/all_botesbasura2.obj");
+	Model allbancas_M("resources/objects/bancas/all_bancas.obj");
 	Model caseta_M("resources/objects/caseta/caseta.obj");
 	Model casa_M("resources/objects/casa/all_casa.obj");
-	Model casa("resources/objects/Casa/new_house.obj");
+	Model casa("resources/objects/mansion/new_house.obj");
+	Model tienda_M("resources/objects/tienda/tienda.obj");
+	Model restaurante_M("resources/objects/restaurante/comida.obj");
+	Model lampara_M("resources/objects/poste/all_lamparas.obj");
+	Model parada_M("resources/objects/paradero/parada.obj");
+	Model alberca_M("resources/objects/alberca/alberca.obj");
+	Model sillasAlberca_M("resources/objects/sillas/sillas_alberca.obj");
+	Model comedor_M("resources/objects/comedor/all_comedor.obj");
+	Model fuente_M("resources/objects/fuente/fuente.obj");
+	Model puesto_M("resources/objects/puesto/puestofyv.obj");
 	//Model arbol1_M("resources/objects/plantas/Tree_OBJ.obj");
 
 	// draw in wireframe
@@ -374,7 +385,7 @@ int main()
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		staticShader.setMat4("model", model);
-		piso.Draw(staticShader);
+		//piso.Draw(staticShader);
 
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
@@ -404,7 +415,19 @@ int main()
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
+		paredes2_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
 		allbotebasura_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		allbotebasura2_M.Draw(staticShader);
 
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
@@ -424,12 +447,66 @@ int main()
 		staticShader.setMat4("model", model);
 		casa_M.Draw(staticShader);
 
-		model = glm::translate(glm::mat4(1.0f), glm::vec3(camera.Position.x, camera.Position.y, camera.Position.z-2.0f));
-		model = glm::scale(model, glm::vec3(0.2f));
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.0f, 150.0f));
+		model = glm::scale(model, glm::vec3(0.3f,0.4f,0.3f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		casa.Draw(staticShader);
 
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		tienda_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		restaurante_M.Draw(staticShader);
+		
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		lampara_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		parada_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		alberca_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		sillasAlberca_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		comedor_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		fuente_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		puesto_M.Draw(staticShader);
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Caja Transparente --- Siguiente Pr�ctica
 		// -------------------------------------------------------------------------------------------------------------------------
