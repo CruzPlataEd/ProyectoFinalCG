@@ -265,10 +265,13 @@ int main()
 	Model comedor_M("resources/objects/comedor/all_comedor.obj");
 	Model fuente_M("resources/objects/fuente/fuente.obj");
 	Model puesto_M("resources/objects/puesto/puestofyv.obj");
-	Model allpalmeras1_M("resources/objects/palmeras/all_palmeras1.obj");
-	Model allpalmeras2_M("resources/objects/palmeras/all_palmeras2.obj");
-	Model allpalmeras3_M("resources/objects/palmeras/all_palmeras3.obj");
-	Model arbol1_M("resources/objects/plantas/OC13_Howea_forsteriana_Kentia_Palm/arbol1.obj");
+	//Model allpalmeras1_M("resources/objects/palmeras/all_palmeras1.obj");
+	//Model allpalmeras2_M("resources/objects/palmeras/all_palmeras2.obj");
+	//Model allpalmeras3_M("resources/objects/palmeras/all_palmeras3.obj");
+	Model puerta1_M("resources/objects/puertas/puerta1.obj");
+	Model puerta2_M("resources/objects/puertas/puerta2.obj");
+	//Model arbol1_M("resources/objects/plantas/OC13_Howea_forsteriana_Kentia_Palm/arbol1.obj");
+
 
 	// draw in wireframe
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -509,7 +512,7 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		puesto_M.Draw(staticShader);
-
+		/*Palmeras
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -521,18 +524,33 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		allpalmeras2_M.Draw(staticShader);
-
+		
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		allpalmeras3_M.Draw(staticShader);
+		*/
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, 0.0f, 270.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		puerta1_M.Draw(staticShader);
 
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(-101.0f, 0.0f, 270.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		puerta2_M.Draw(staticShader);
+
+		/*Palmera prueba
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
-		arbol1_M.Draw(staticShader);
+		arbol1_M.Draw(staticShader);*/
+
+
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Caja Transparente --- Siguiente Pr�ctica
 		// -------------------------------------------------------------------------------------------------------------------------
