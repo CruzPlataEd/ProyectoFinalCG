@@ -424,8 +424,8 @@ int main()
 		staticShader.setMat4("model", model);
 		casa_M.Draw(staticShader);
 
-		model = glm::translate(glm::mat4(1.0f), glm::vec3(-30.0f, 50.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f,10.0f,5.0f));
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(camera.Position.x, camera.Position.y, camera.Position.z-2.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		casa.Draw(staticShader);
