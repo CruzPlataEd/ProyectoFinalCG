@@ -265,6 +265,7 @@ int main()
 	Model comedor_M("resources/objects/comedor/all_comedor.obj");
 	Model fuente_M("resources/objects/fuente/fuente.obj");
 	Model puesto_M("resources/objects/puesto/puestofyv.obj");
+	//Model allpalmeras1_M("resources/objects/palmeras/all_palmeras1.obj");
 	//Model arbol1_M("resources/objects/plantas/Tree_OBJ.obj");
 
 	// draw in wireframe
@@ -506,6 +507,13 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		puesto_M.Draw(staticShader);
+
+		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		allpalmeras1_M_M.Draw(staticShader);*/
+
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Caja Transparente --- Siguiente Pr�ctica
 		// -------------------------------------------------------------------------------------------------------------------------
