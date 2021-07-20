@@ -10,7 +10,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd ProyectoFinalCG\\ProyectoFinalTeoria_CruzPlata_MarinJimenez\\resources\\objects\\palmeras\\textura_palmera.jpg
+map_Kd textura_palmera.jpg
 
 newmtl Material.040
 Ns 225.000000
@@ -21,7 +21,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd ProyectoFinalCG\\ProyectoFinalTeoria_CruzPlata_MarinJimenez\\resources\\objects\\palmeras\\textura_palmera.jpg
+map_Kd textura_palmera.jpg
 
 newmtl Material.041
 Ns 225.000000
@@ -32,7 +32,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd ProyectoFinalCG\\ProyectoFinalTeoria_CruzPlata_MarinJimenez\\resources\\objects\\palmeras\\textura_palmera.jpg
+map_Kd textura_palmera.jpg
 
 newmtl Material.050
 Ns 225.000000
@@ -43,7 +43,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd ProyectoFinalCG\\ProyectoFinalTeoria_CruzPlata_MarinJimenez\\resources\\objects\\palmeras\\textura_palmera.jpg
+map_Kd textura_palmera.jpg
 
 newmtl Material.051
 Ns 225.000000
@@ -54,7 +54,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd ProyectoFinalCG\\ProyectoFinalTeoria_CruzPlata_MarinJimenez\\resources\\objects\\palmeras\\textura_palmera.jpg
+map_Kd textura_palmera.jpg
 
 newmtl Material.061
 Ns 225.000000
@@ -65,7 +65,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd ProyectoFinalCG\\ProyectoFinalTeoria_CruzPlata_MarinJimenez\\resources\\objects\\palmeras\\textura_palmera.jpg
+map_Kd textura_palmera.jpg
 
 newmtl Material.068
 Ns 225.000000
@@ -76,7 +76,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd ProyectoFinalCG\\ProyectoFinalTeoria_CruzPlata_MarinJimenez\\resources\\objects\\palmeras\\textura_palmera.jpg
+map_Kd textura_palmera.jpg
 
 newmtl Material.070
 Ns 225.000000
@@ -87,7 +87,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd ProyectoFinalCG\\ProyectoFinalTeoria_CruzPlata_MarinJimenez\\resources\\objects\\palmeras\\textura_palmera.jpg
+map_Kd textura_palmera.jpg
 
 newmtl Material.071
 Ns 225.000000
@@ -98,7 +98,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd ProyectoFinalCG\\ProyectoFinalTeoria_CruzPlata_MarinJimenez\\resources\\objects\\palmeras\\textura_palmera.jpg
+map_Kd textura_palmera.jpg
 
 newmtl Material.078
 Ns 225.000000
@@ -109,7 +109,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd ProyectoFinalCG\\ProyectoFinalTeoria_CruzPlata_MarinJimenez\\resources\\objects\\palmeras\\textura_palmera.jpg
+map_Kd textura_palmera.jpg
 
 newmtl Material.088
 Ns 225.000000
@@ -120,7 +120,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd ProyectoFinalCG\\ProyectoFinalTeoria_CruzPlata_MarinJimenez\\resources\\objects\\palmeras\\textura_palmera.jpg
+map_Kd textura_palmera.jpg
 
 newmtl Material.090
 Ns 225.000000
@@ -131,4 +131,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd ProyectoFinalCG\\ProyectoFinalTeoria_CruzPlata_MarinJimenez\\resources\\objects\\palmeras\\textura_palmera.jpg
+map_Kd textura_palmera.jpg
