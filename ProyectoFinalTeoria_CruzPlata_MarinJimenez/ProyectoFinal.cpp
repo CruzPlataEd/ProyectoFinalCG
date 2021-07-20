@@ -268,7 +268,7 @@ int main()
 	Model allpalmeras1_M("resources/objects/palmeras/all_palmeras1.obj");
 	Model allpalmeras2_M("resources/objects/palmeras/all_palmeras2.obj");
 	Model allpalmeras3_M("resources/objects/palmeras/all_palmeras3.obj");
-	//Model arbol1_M("resources/objects/plantas/Tree_OBJ.obj");
+	Model arbol1_M("resources/objects/plantas/OC13_Howea_forsteriana_Kentia_Palm/arbol1.obj");
 
 	// draw in wireframe
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -528,6 +528,11 @@ int main()
 		staticShader.setMat4("model", model);
 		allpalmeras3_M.Draw(staticShader);
 
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		arbol1_M.Draw(staticShader);
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Caja Transparente --- Siguiente Pr�ctica
 		// -------------------------------------------------------------------------------------------------------------------------
