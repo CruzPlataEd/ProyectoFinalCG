@@ -77,6 +77,12 @@ bool terceraPersona = true,
 guardado = false,
 finish = false;
 
+//Rotacion puertas
+float rotaciondoor1 = 0.0f;
+float rotaciondoor2 = 180.0f;
+float cont;
+bool banderadoor = false;
+
 void getResolution()
 {
 	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -147,6 +153,22 @@ void animate(void)
 	if (tiempoLuz <= 0.0f and bandera == false) {
 		bandera = true;
 		tiempoLuz += 0.0005f;
+	}
+}
+
+void animatedoor(void)
+{
+	if (rotaciondoor1 < 90.0f and banderadoor == true) {
+		rotaciondoor1 += 0.3f;
+	}
+	if ( rotaciondoor2 > 105.0f and banderadoor == true) {
+		rotaciondoor2 -= 0.3f;
+	}
+	if (rotaciondoor1 > -0.1f and banderadoor == false) {
+		rotaciondoor1 -= 0.3f;
+	}
+	if (rotaciondoor2 < 180.0f and banderadoor == false) {
+		rotaciondoor2 += 0.3f;
 	}
 }
 
@@ -269,7 +291,10 @@ int main()
 	//Model allpalmeras1_M("resources/objects/palmeras/all_palmeras1.obj");
 	//Model allpalmeras2_M("resources/objects/palmeras/all_palmeras2.obj");
 	//Model allpalmeras3_M("resources/objects/palmeras/all_palmeras3.obj");
-	Model arbol1_M("resources/objects/plantas/OC13_Howea_forsteriana_Kentia_Palm/arbol1.obj");
+	Model puerta1_M("resources/objects/puertas/puerta1.obj");
+	Model puerta2_M("resources/objects/puertas/puerta2.obj");
+	//Model arbol1_M("resources/objects/plantas/OC13_Howea_forsteriana_Kentia_Palm/arbol1.obj");
+
 
 	ModelAnim personaje("resources/objects/Personaje/Walking.dae");
 	personaje.initShaders(animShader.ID);
@@ -281,6 +306,7 @@ int main()
 		skyboxShader.use();
 		animate();
 		cambioCamara();
+		animatedoor();
 
 		// per-frame time logic
 		// --------------------
@@ -485,7 +511,8 @@ int main()
 		staticShader.setMat4("model", model);
 		puesto_M.Draw(staticShader);
 
-		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		/*Palmeras
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
@@ -496,18 +523,34 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		allpalmeras2_M.Draw(staticShader);
-
+		
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
-		allpalmeras3_M.Draw(staticShader);*/
+		allpalmeras3_M.Draw(staticShader);
+		*/
 
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(-101.0f, 0.0f, 270.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(rotaciondoor1), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		puerta1_M.Draw(staticShader);
+		
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, 0.0f, 270.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(rotaciondoor2), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		puerta2_M.Draw(staticShader);
+
+		/*Palmera prueba
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
-		arbol1_M.Draw(staticShader);
+		arbol1_M.Draw(staticShader);*/
+
+
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Caja Transparente --- Siguiente Pr�ctica
 		// -------------------------------------------------------------------------------------------------------------------------
@@ -616,7 +659,12 @@ void my_input(GLFWwindow *window, int key, int scancode, int action, int mode)
 	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
 		terceraPersona = true;
 
-	
+	//Abrir y cerrar puerta
+	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
+		banderadoor = true;
+	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
+		banderadoor = false;
+
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
