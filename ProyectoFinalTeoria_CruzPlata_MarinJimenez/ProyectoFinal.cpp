@@ -8,6 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <time.h>
 #include <camera.h>
+#include <math.h>
 
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -39,6 +40,9 @@ void getResolution(void);
 float CamaraX = 0.0f,
 CamaraY = 20.0f,
 CamaraZ = 450.0f;
+float PersonaX1 = 0.0f,
+PersonaX2 = 0.0f;
+
 
 // camera
 Camera camera(glm::vec3(CamaraX, CamaraY, CamaraZ));
@@ -46,6 +50,9 @@ float MovementSpeed = 10.0f;
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
+float Yaw;
+float PosX = 0.0f,
+PosY = 450;
 
 // timing
 const int FPS = 60;
@@ -145,12 +152,7 @@ void animate(void)
 
 int main()
 {
-	// glfw: initialize and configure
-	// ------------------------------
 	glfwInit();
-	/*glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);*/
 
 #ifdef __APPLE__
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -245,7 +247,6 @@ int main()
 	// -----------
 	Model piso("resources/objects/piso/piso.obj");
 	Model escenario_M("resources/objects/piso/textura_escenario.obj");
-	Model casaModerna("resources/objects/CasaModerna/Farm_house.obj");
 	Model calle_M("resources/objects/piso/calle.obj");
 	Model calleBanqueta_M("resources/objects/piso/calles_banquetas_unosolo.obj");
 	Model paredes_M("resources/objects/paredes/paredes.obj");
@@ -265,13 +266,13 @@ int main()
 	Model comedor_M("resources/objects/comedor/all_comedor.obj");
 	Model fuente_M("resources/objects/fuente/fuente.obj");
 	Model puesto_M("resources/objects/puesto/puestofyv.obj");
-	Model allpalmeras1_M("resources/objects/palmeras/all_palmeras1.obj");
-	Model allpalmeras2_M("resources/objects/palmeras/all_palmeras2.obj");
-	Model allpalmeras3_M("resources/objects/palmeras/all_palmeras3.obj");
+	//Model allpalmeras1_M("resources/objects/palmeras/all_palmeras1.obj");
+	//Model allpalmeras2_M("resources/objects/palmeras/all_palmeras2.obj");
+	//Model allpalmeras3_M("resources/objects/palmeras/all_palmeras3.obj");
 	Model arbol1_M("resources/objects/plantas/OC13_Howea_forsteriana_Kentia_Palm/arbol1.obj");
 
-	// draw in wireframe
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	ModelAnim personaje("resources/objects/Personaje/Walking.dae");
+	personaje.initShaders(animShader.ID);
 
 	// render loop
 	// -----------
@@ -285,9 +286,6 @@ int main()
 		// --------------------
 		lastFrame = SDL_GetTicks();
 
-		// input
-		// -----
-		//my_input(window);
 
 		// render
 		// ------
@@ -337,7 +335,6 @@ int main()
 		glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
 		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.75f);
 
-
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Personaje Animacion
 		// -------------------------------------------------------------------------------------------------------------------------
@@ -354,23 +351,16 @@ int main()
 		animShader.setVec3("light.direction", lightDirection);
 		animShader.setVec3("viewPos", camera.Position);
 
-
-		//Animaci�n del personaje
-		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(-40.3f, 1.75f, 0.3f)); // translate it down so it's at the center of the scene
-		model = glm::scale(model, glm::vec3(1.2f));	// it's a bit too big for our scene, so scale it down
-		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		// -------------------------------------------------
+		// Personaje principal - Patricio animado
+		// -------------------------------------------------
+		model = glm::translate(glm::mat4(1.0f),glm::vec3(PosX + PersonaX1, 10.0f,  PosY + PersonaX2));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.08f));
 		animShader.setMat4("model", model);
-		animacionPersonaje.Draw(animShader);*/
+		personaje.Draw(animShader);
 
-		// -------------------------------------------------------------------------------------------------------------------------
-		// Segundo Personaje Animacion
-		// -------------------------------------------------------------------------------------------------------------------------
 
-		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(40.3f, 1.75f, 0.3f)); // translate it down so it's at the center of the scene
-		model = glm::scale(model, glm::vec3(0.5f));	// it's a bit too big for our scene, so scale it down
-		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		animShader.setMat4("model", model);
-		ninja.Draw(animShader);*/
 
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Escenario
@@ -379,28 +369,12 @@ int main()
 		staticShader.setMat4("projection", projection);
 		staticShader.setMat4("view", view);
 
-		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(100.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		staticShader.setMat4("model", model);
-		casaModerna.Draw(staticShader);*/
-
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.2f));
-		staticShader.setMat4("model", model);
-		//piso.Draw(staticShader);
 
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		escenario_M.Draw(staticShader);
-
-		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 450.0f));
-		model = glm::scale(model, glm::vec3(0.2f));
-		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		staticShader.setMat4("model", model);
-		calle_M.Draw(staticShader);*/
 
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
@@ -511,7 +485,7 @@ int main()
 		staticShader.setMat4("model", model);
 		puesto_M.Draw(staticShader);
 
-		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
@@ -527,7 +501,7 @@ int main()
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
-		allpalmeras3_M.Draw(staticShader);
+		allpalmeras3_M.Draw(staticShader);*/
 
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
@@ -548,9 +522,6 @@ int main()
 		// Termina Escenario
 		// -------------------------------------------------------------------------------------------------------------------------
 
-		//-------------------------------------------------------------------------------------
-		// draw skybox as last
-		// -------------------
 		skyboxShader.use();
 		
 		if (cambiobox == 0) {
@@ -592,21 +563,46 @@ int main()
 // ---------------------------------------------------------------------------------------------------------
 void my_input(GLFWwindow *window, int key, int scancode, int action, int mode)
 {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) 
 		glfwSetWindowShouldClose(window, true);
+	
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		if (terceraPersona == true)
+		if (terceraPersona == true) {
 			camera.ProcessKeyboard(FORWARD, (float)deltaTime);
+			if (guardado == false) {
+				PosX = camera.Position.x;
+				PosY = camera.Position.z;
+			}
+		}
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){ 
-		if (terceraPersona == true)
+		if (terceraPersona == true) {
 			camera.ProcessKeyboard(BACKWARD, (float)deltaTime);
+			if (guardado == false) {
+				PosX = camera.Position.x;
+				PosY = camera.Position.z;
+			}
+		}
 	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
 		camera.ProcessKeyboard(LEFT, (float)deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		if (terceraPersona == true) {
+			if (guardado == false) {
+				PosX = camera.Position.x;
+				PosY = camera.Position.z;
+			}
+		}
+	}
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
 		camera.ProcessKeyboard(RIGHT, (float)deltaTime);
+		if (terceraPersona == true) {
+			if (guardado == false) {
+				PosX = camera.Position.x;
+				PosY = camera.Position.z;
+			}
+		}
+	}
 
 	//To Configure Model
 	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
@@ -654,8 +650,19 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 			camera.Pitch = 0.0f;
 			camera.Yaw = -90.0f;
 		}
-		else
+		
+		if (guardado == false) {
 			camera.ProcessMouseMovement(xoffset, 0);
+			if (xoffset > 0) {
+				PersonaX1 = 15 * (camera.Front.x);
+				PersonaX2 = 15 * (camera.Front.z);
+			}
+			if (xoffset < 0) {
+				PersonaX1 = 15 * (camera.Front.x);
+				PersonaX2 = 15 * (camera.Front.z);
+			}
+		}
+		
 	}
 	if (terceraPersona == false)
 		camera.ProcessMouseMovement(xoffset, -90);
