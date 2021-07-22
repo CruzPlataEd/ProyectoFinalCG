@@ -36,22 +36,23 @@ unsigned int SCR_HEIGHT = 600;
 GLFWmonitor *monitors;
 
 void getResolution(void);
-float CamaraX = 0.0f,
-CamaraY = 20.0f,
-CamaraZ = 450.0f;
-float PersonaX1 = 0.0f,
-PersonaX2 = 0.0f;
+float CamaraX   = 0.0f;    //Funciona para cuando cambiamos de camara de tercera persona a aerea.
+float CamaraY   = 20.0f;   //Las coordenadas de CamaraX,Y,Z sirven para cambiar de posición a la camara.
+float CamaraZ   = 450.0f;
+float PersonaX1 = 0.0f;    //Se utiliza para que nuestro personaje principal rote con respecto a la camara.
+float PersonaX2 = 0.0f;    //PersonaX1,2 va a mover a nuestro personaje dependiendo de como movamos el mouse
+float rotacion  = 180.0f;  //Es la variable para rotar al personaje
+float PosX = 0.0f;		   // Sirve para mover al personaje cuando presionamos una tecla
+float PosY = 450.0f;
 
 
 // camera
 Camera camera(glm::vec3(CamaraX, CamaraY, CamaraZ));
-float MovementSpeed = 10.0f;
-float lastX = SCR_WIDTH / 2.0f;
+float MovementSpeed = 5.0f;        //Sirve para saber que tan rapido se mueve la camara
+float lastX = SCR_WIDTH / 2.0f;    //Funciona en conjunto al mouse para mover la camara
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
-float Yaw;
-float PosX = 0.0f,
-PosY = 450;
+
 
 // timing
 const int FPS = 60;
@@ -62,19 +63,16 @@ lastFrame = 0.0f;
 //Lighting
 glm::vec3 lightPosition(0.0f, 4.0f, -10.0f);
 glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
+glm::vec3 CamaraPersona(0.0f, 0.0f, 0.0f);  //En esta variable vamos a guardar la ultima posición del personaje 
+		//Guardarlo va a servir para que cuando volvamos de la camara aerea sepamos donde se quedó el personaje
 
-int i = 0;
-float x = 0.0f,
-y = 0.0f,
-z = 0.0f;
-glm::vec3 CamaraPersona(x, y, z);
-
-float tiempoLuz = 0.0f;
-bool bandera = true;
-int cambiobox = 0;
-bool terceraPersona = true,
-guardado = false,
-finish = false;
+float tiempoLuz = 0.0f;      //Contador para saber el tiempo que durara cada skyBox y hacer más tenue la luz con el paso del tiempo
+bool bandera = true;         //La bandera servirá para saber cuando llegamos a una hora del dia e ir de regreso
+int cambiobox = 0;		     // Lo utilizamos cuando queremos cambiar de skyBox (depende de tiempoLuz)
+bool terceraPersona = true;  //Nos va a sevir para cuando presionemos un tecla y cambiemos de tipo de camara
+bool guardado = false;       //Nos indica cuando ya hemos guardado la posición del personaje al cambiar de camara
+bool finish = false;         //Sirve porque al cambiar de camara iremos lentamente a la posición indicada, 
+							 //la variable nos indicará cuando lleguemos a la meta
 
 //Rotacion puertas
 float rotaciondoor1 = 0.0f;
@@ -90,15 +88,23 @@ void getResolution()
 	SCR_HEIGHT = (mode->height) - 80;
 }
 
+
+/*
+	Cuando presionemos la tecla para cambiar de camara de tercera persona vamos a entrar en esta función
+	Esta función funciona como si fuera un while, va a seguir aumentando sus coordenadas hasta llegar a la meta
+*/
 void cambioCamara(void) {
+	//Cuando cambaimos a la camara aerea y aún no estamos en la meta entramos al if
 	if (terceraPersona == false and finish == false) {
+		//Si aún no hemos guardado las coordenadas de nuestro personaje los vamos a guardar
 		if (guardado == false) {
 			CamaraX = camera.Position.x;
 			CamaraY = camera.Position.y;
 			CamaraZ = camera.Position.z;
-			CamaraPersona = camera.Position;
-			guardado = true;
+			CamaraPersona = camera.Position;  //Nos servirá para hacer otro while hasta ir detrás de nuestro personaje
+			guardado = true;				  //Indicamos que se guardó la ultima posición 
 		}
+		//While (Nos dirijiremos a las coordenadas (0,350,0)
 		if (CamaraX < 0.0f) 
 			CamaraX += 2.0f;
 		if (CamaraX > 5.0f)
@@ -108,47 +114,64 @@ void cambioCamara(void) {
 		if (CamaraZ > 5.0f)
 			CamaraZ -= 2.0f;
 		if (CamaraY < 350.0f)
-			CamaraY += 1.0f;
+			CamaraY += 2.0f;
+		//-------------------------------------------------------
+		//Cuando llegamos a las coordenadas, vamos a cambiar la variable finish
 		if (CamaraX<=5.0f and CamaraX>=0.0f and CamaraZ<=5.0f and CamaraZ>=0.0f and CamaraY >= 350.0f)
 			finish = true;
+		//Vamos a estar cambiando la posición de la camara a lo largo del while
 		camera.Position = glm::vec3(CamaraX, CamaraY, CamaraZ);
 	}
+
+	//Si tenemos unas coordenadas guardadas y la tercera persona está activada entramos al if
 	if (terceraPersona == true and guardado == true) {
+		//Entramos al while y aumentaremos o diminuiremos las coordenadas de la camara hasta llegar a la ultima posición guardada
 		if (CamaraX < CamaraPersona.x)
-			CamaraX += 1.0f;
+			CamaraX += 2.0f;
 		if (CamaraX > CamaraPersona.x)
-			CamaraX -= 1.0f;
+			CamaraX -= 2.0f;
 		if (CamaraZ < CamaraPersona.z)
-			CamaraZ += 1.0f;
+			CamaraZ += 2.0f;
 		if (CamaraZ > CamaraPersona.z)
-			CamaraZ -= 1.0f;
+			CamaraZ -= 2.0f;
 		if (CamaraY > CamaraPersona.y)
-			CamaraY -= 1.0f;
+			CamaraY -= 2.0f;
+		//------------------------------------------------------
+		// Si llegamos a las coordenadas deseadas le decimos que ya no estamos guardando nada y que terminamos
 		if (CamaraX <= CamaraPersona.x and CamaraX >= CamaraPersona.x and CamaraZ <= CamaraPersona.z and CamaraZ >= CamaraPersona.z and CamaraY <= CamaraPersona.y){
 			guardado = false;
 			finish = false;
 		}
+		//Modificamos la posición de la camara a lo largo del while
 		camera.Position = glm::vec3(CamaraX, CamaraY, CamaraZ);
 	}
 }
 
+/*
+	Esta función funciona para hacer que la luz cambie a lo largo del tiempo y también indica cuando se cambiará de skybox
+*/
 void animate(void)
 {
-
+	//Cuando la luz va de 0 a 1.5 vamos a tener la bandera de true, la luz ira incrementando de 0.0005 en 0.0005
 	if (tiempoLuz >= 0.0f and tiempoLuz < 1.5f and bandera == true) {
 		tiempoLuz += 0.0005f;
+		//Cuando la variable tiempoLuz sea igual a 1.2 el skybox va a cambiar
 		if (tiempoLuz >= 1.2f)
 			cambiobox = 1;  //Dia
 	}
+	//Cuando la variable llegue a 1.5 la bandera va a cambiar a false
 	if (tiempoLuz >= 1.5f and bandera == true) {
 		bandera = false;
 		tiempoLuz -= 0.0005f;
 	}
+	//Cuando la bandera cambia ira de manera inversa, de 1.5 a 0
 	if (tiempoLuz >= 0.0f and tiempoLuz < 1.5f and bandera == false) {
 		tiempoLuz -= 0.0005f;
+		//Cuando la variable sea 0.7 el skybox cambiará a la noche
 		if (tiempoLuz <= 0.7f)
 			cambiobox = 2;  //Noche
 	}
+	//Cuando llegue a 0 la bandera va a cambiar y se repetirá todo el ciclo
 	if (tiempoLuz <= 0.0f and bandera == false) {
 		bandera = true;
 		tiempoLuz += 0.0005f;
@@ -270,16 +293,16 @@ int main()
 	Model escenario_M("resources/objects/piso/textura_escenario.obj");
 	Model calle_M("resources/objects/piso/calle.obj");
 	Model calleBanqueta_M("resources/objects/piso/calles_banquetas_unosolo.obj");
-	Model paredes_M("resources/objects/paredes/paredes.obj");
-	Model paredes2_M("resources/objects/paredes/paredes2.obj");
-	Model allbotebasura_M("resources/objects/mobiliario/all_botesbasura.obj");
-	Model allbotebasura2_M("resources/objects/mobiliario/all_botesbasura2.obj");
-	Model allbancas_M("resources/objects/bancas/all_bancas.obj");
-	Model caseta_M("resources/objects/caseta/caseta.obj");
-	Model casa_M("resources/objects/casa/all_casa.obj");
-	Model casa("resources/objects/mansion/new_house.obj");
-	Model tienda_M("resources/objects/tienda/tienda.obj");
-	Model restaurante_M("resources/objects/restaurante/comida.obj");
+	//Model paredes_M("resources/objects/paredes/paredes.obj");
+	//Model paredes2_M("resources/objects/paredes/paredes2.obj");
+	//Model allbotebasura_M("resources/objects/mobiliario/all_botesbasura.obj");
+	//Model allbotebasura2_M("resources/objects/mobiliario/all_botesbasura2.obj");
+	//Model allbancas_M("resources/objects/bancas/all_bancas.obj");
+	//Model caseta_M("resources/objects/caseta/caseta.obj");
+	//Model casa_M("resources/objects/casa/all_casa.obj");
+	//Model casa("resources/objects/mansion/new_house.obj");
+	//Model tienda_M("resources/objects/tienda/tienda.obj");
+	//Model restaurante_M("resources/objects/restaurante/comida.obj");
 	Model lampara_M("resources/objects/poste/all_lamparas.obj");
 	Model parada_M("resources/objects/paradero/parada.obj");
 	Model alberca_M("resources/objects/alberca/alberca.obj");
@@ -290,8 +313,10 @@ int main()
 	//Model allpalmeras1_M("resources/objects/palmeras/all_palmeras1.obj");
 	//Model allpalmeras2_M("resources/objects/palmeras/all_palmeras2.obj");
 	//Model allpalmeras3_M("resources/objects/palmeras/all_palmeras3.obj");
-	Model puerta1_M("resources/objects/puertas/puerta1.obj");
-	Model puerta2_M("resources/objects/puertas/puerta2.obj");
+	//Model puerta1_M("resources/objects/puertas/puerta1.obj");
+	//Model puerta2_M("resources/objects/puertas/puerta2.obj");
+
+
 	//Model arbol1_M("resources/objects/plantas/OC13_Howea_forsteriana_Kentia_Palm/arbol1.obj");
 
 
@@ -380,7 +405,7 @@ int main()
 		// Personaje principal - Patricio animado
 		// -------------------------------------------------
 		model = glm::translate(glm::mat4(1.0f),glm::vec3(PosX + PersonaX1, 10.0f,  PosY + PersonaX2));
-		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(rotacion), glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.08f));
 		animShader.setMat4("model", model);
 		personaje.Draw(animShader);
@@ -407,7 +432,7 @@ int main()
 		staticShader.setMat4("model", model);
 		calleBanqueta_M.Draw(staticShader);
 
-		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
@@ -417,9 +442,9 @@ int main()
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
-		paredes2_M.Draw(staticShader);
+		paredes2_M.Draw(staticShader);*/
 
-		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
@@ -454,9 +479,9 @@ int main()
 		model = glm::scale(model, glm::vec3(0.3f,0.4f,0.3f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
-		casa.Draw(staticShader);
+		casa.Draw(staticShader);*/
 
-		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
@@ -466,7 +491,7 @@ int main()
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
-		restaurante_M.Draw(staticShader);
+		restaurante_M.Draw(staticShader);*/
 		
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
@@ -530,7 +555,7 @@ int main()
 		allpalmeras3_M.Draw(staticShader);
 		*/
 
-		model = glm::translate(glm::mat4(1.0f), glm::vec3(-101.0f, 0.0f, 270.0f));
+		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(-101.0f, 0.0f, 270.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(rotaciondoor1), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
@@ -540,7 +565,7 @@ int main()
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(rotaciondoor2), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
-		puerta2_M.Draw(staticShader);
+		puerta2_M.Draw(staticShader);*/
 
 		/*Palmera prueba
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -686,6 +711,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 		firstMouse = false;
 	}
 
+	
 	float xoffset = xpos - lastX;
 	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
 
@@ -707,6 +733,18 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 			if (xoffset < 0) {
 				PersonaX1 = 15 * (camera.Front.x);
 				PersonaX2 = 15 * (camera.Front.z);
+			}
+			if (((PosY-10) - (PosY + PersonaX2)) > 0 and ((PosX - 10) - (PosX + PersonaX1)) < 0 and ((10 + PosX) - (PosX + PersonaX1)) > 0) {
+				rotacion = 180.0f;
+			}
+			if (((10+PosY) - (PosY + PersonaX2)) < 0 and ((PosX - 10) - (PosX + PersonaX1)) < 0 and ((10 + PosX) - (PosX + PersonaX1)) > 0) {
+				rotacion = 0.0f;
+			}
+			if (((PosX-10) - (PosX + PersonaX1)) > 0 and ((PosY - 10) - (PosY + PersonaX2)) < 0 and ((10 + PosY) - (PosY + PersonaX2)) > 0) {
+				rotacion = 270.0f;
+			}
+			if (((10+PosX) - (PosX + PersonaX1)) < 0 and ((PosY - 10) - (PosY + PersonaX2)) < 0 and ((10 + PosY) - (PosY + PersonaX2)) > 0) {
+				rotacion = 90.0f;
 			}
 		}
 		
