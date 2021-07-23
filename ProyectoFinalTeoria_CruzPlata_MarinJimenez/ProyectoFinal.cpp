@@ -39,8 +39,10 @@ void getResolution(void);
 float CamaraX   = 0.0f;    //Funciona para cuando cambiamos de camara de tercera persona a aerea.
 float CamaraY   = 20.0f;   //Las coordenadas de CamaraX,Y,Z sirven para cambiar de posición a la camara.
 float CamaraZ   = 450.0f;
+
 float PersonaX1 = 0.0f;    //Se utiliza para que nuestro personaje principal rote con respecto a la camara.
 float PersonaX2 = 0.0f;    //PersonaX1,2 va a mover a nuestro personaje dependiendo de como movamos el mouse
+
 float rotacion  = 180.0f;  //Es la variable para rotar al personaje
 float PosX = 0.0f;		   // Sirve para mover al personaje cuando presionamos una tecla
 float PosY = 450.0f;
@@ -64,6 +66,7 @@ lastFrame = 0.0f;
 float Noche = 1.0f;
 glm::vec3 lightPosition(0.0f, 4.0f, -10.0f);
 glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
+
 glm::vec3 CamaraPersona(0.0f, 0.0f, 0.0f);  //En esta variable vamos a guardar la ultima posición del personaje 
 		//Guardarlo va a servir para que cuando volvamos de la camara aerea sepamos donde se quedó el personaje
 
@@ -486,8 +489,6 @@ int main()
 		animShader.setMat4("model", model);
 		personaje.Draw(animShader);
 
-		
-
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Escenario
 		// -------------------------------------------------------------------------------------------------------------------------
@@ -833,6 +834,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 		
 		if (guardado == false) {
 			camera.ProcessMouseMovement(xoffset, 0);
+			
 			if (xoffset > 0) {
 				PersonaX1 = 15 * (camera.Front.x);
 				PersonaX2 = 15 * (camera.Front.z);
