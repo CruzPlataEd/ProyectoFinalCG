@@ -81,6 +81,11 @@ float rotaciondoor2 = 180.0f;
 float cont;
 bool banderadoor = false;
 
+//Rotacion columpio
+float rotacionswing = 0.0f;
+float cont2 = 45.0f;
+float cont3 = -42.0f;
+int banderaswing = 0;
 
 float	movAuto_x = 0.0f;
 float   movAuto_z = 0.0f;
@@ -207,7 +212,8 @@ void animatedoor(void)
 		rotaciondoor2 += 0.3f;
 	}
 }
-/*void animatecolumpio(void)
+
+void animatecolumpio(void)
 {
 	switch (banderaswing)
 	{
@@ -250,7 +256,7 @@ void animatedoor(void)
 		default:
 			break;
 	}
-}*/
+}
 
 
 int main()
@@ -394,7 +400,7 @@ int main()
 		animate();
 		cambioCamara();
 		animatedoor();
-		//animatecolumpio();
+		animatecolumpio();
 
 		// per-frame time logic
 		// --------------------
@@ -636,7 +642,6 @@ int main()
 		staticShader.setMat4("model", model);
 		casa_M.Draw(staticShader);
 
-
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.0f, 150.0f));
 		model = glm::scale(model, glm::vec3(0.3f,0.4f,0.3f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -696,7 +701,7 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		puesto_M.Draw(staticShader);
-		/*
+		
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 35.0f, -10.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -708,7 +713,7 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, glm::radians(rotacionswing), glm::vec3(0.0f, 0.0f, 1.0f));
 		staticShader.setMat4("model", model);
-		asientocolumpio_M.Draw(staticShader);*/
+		asientocolumpio_M.Draw(staticShader);
 
 		/*Palmeras
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -860,8 +865,8 @@ void my_input(GLFWwindow *window, int key, int scancode, int action, int mode)
 		banderadoor = false;
 
 	//Animacion columpio
-	//if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
-	//	banderaswing = 1;
+	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
+		banderaswing = 1;
 
 }
 
