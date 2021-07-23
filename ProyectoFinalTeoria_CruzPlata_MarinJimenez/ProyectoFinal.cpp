@@ -702,15 +702,15 @@ int main()
 		staticShader.setMat4("model", model);
 		puesto_M.Draw(staticShader);
 		
-		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 35.0f, -10.0f));
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(-205.0f, 30.0f, 125.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
-		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		basecolumpio_M.Draw(staticShader);
 
-		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 35.0f, -10.0f));
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(-205.0f, 30.0f, 125.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
-		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, glm::radians(rotacionswing), glm::vec3(0.0f, 0.0f, 1.0f));
 		staticShader.setMat4("model", model);
 		asientocolumpio_M.Draw(staticShader);
