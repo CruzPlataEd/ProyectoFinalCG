@@ -84,11 +84,18 @@ float rotaciondoor2 = 180.0f;
 float cont;
 bool banderadoor = false;
 
+//Rotacion columpio
+float rotacionswing = 0.0f;
+float cont2 = 45.0f;
+float cont3 = -42.0f;
+int banderaswing = 0;
+
 float	movAuto_x = 0.0f;
 float   movAuto_z = 0.0f;
 float   movAuto_y = 0.0f;
 float   orienta = 0.0f;
 float   giroLlantas = 0.0f;
+
 
 void getResolution()
 {
@@ -209,6 +216,52 @@ void animatedoor(void)
 	}
 }
 
+void animatecolumpio(void)
+{
+	switch (banderaswing)
+	{
+		case 1:
+			if (rotacionswing < cont2)
+				rotacionswing += 3.0f;
+			else
+				banderaswing = 2;
+				break;
+		case 2:
+			if (rotacionswing > 0.0f) 
+				rotacionswing -= 3.0f;
+			else
+				banderaswing = 3;
+				break;
+		case 3:
+			if (rotacionswing > cont3)
+				rotacionswing -= 3.0f;
+			else
+				banderaswing = 4;
+				break;
+		case 4:
+			if (rotacionswing < 0.0f)
+				rotacionswing += 3.0f;
+			else
+				banderaswing = 5;
+				break;
+		case 5:
+			cont2 -= 3.0f;
+			cont3 += 3.0f;
+			if (cont2 == 0.0f or cont3 == 0.0f)
+			{
+				cont2 = 45.0f;
+				cont3 = -42.0f;
+				banderaswing = 0;
+			}
+			else
+				banderaswing = 1;
+			break;
+		default:
+			break;
+	}
+}
+
+
 int main()
 {
 	glfwInit();
@@ -325,6 +378,8 @@ int main()
 	Model comedor_M("resources/objects/comedor/all_comedor.obj");
 	Model fuente_M("resources/objects/fuente/fuente.obj");
 	Model puesto_M("resources/objects/puesto/puestofyv.obj");
+	Model basecolumpio_M("resources/objects/juegos/base_columpio.obj");
+	Model asientocolumpio_M("resources/objects/juegos/asiento_columpio.obj");
 	//Model allpalmeras1_M("resources/objects/palmeras/all_palmeras1.obj");
 	//Model allpalmeras2_M("resources/objects/palmeras/all_palmeras2.obj");
 	//Model allpalmeras3_M("resources/objects/palmeras/all_palmeras3.obj");
@@ -348,6 +403,7 @@ int main()
 		animate();
 		cambioCamara();
 		animatedoor();
+		animatecolumpio();
 
 		// per-frame time logic
 		// --------------------
@@ -587,7 +643,6 @@ int main()
 		staticShader.setMat4("model", model);
 		casa_M.Draw(staticShader);
 
-
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.0f, 150.0f));
 		model = glm::scale(model, glm::vec3(0.3f,0.4f,0.3f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -647,6 +702,19 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		puesto_M.Draw(staticShader);
+		
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 35.0f, -10.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		basecolumpio_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 35.0f, -10.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(rotacionswing), glm::vec3(0.0f, 0.0f, 1.0f));
+		staticShader.setMat4("model", model);
+		asientocolumpio_M.Draw(staticShader);
 
 		/*Palmeras
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -791,11 +859,15 @@ void my_input(GLFWwindow *window, int key, int scancode, int action, int mode)
 	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
 		terceraPersona = true;
 
-	//Abrir y cerrar puerta
+	//Animacion abrir y cerrar puerta
 	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
 		banderadoor = true;
 	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
 		banderadoor = false;
+
+	//Animacion columpio
+	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
+		banderaswing = 1;
 
 }
 
