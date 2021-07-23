@@ -61,6 +61,7 @@ double	deltaTime = 0.0f,
 lastFrame = 0.0f;
 
 //Lighting
+float Noche = 1.0f;
 glm::vec3 lightPosition(0.0f, 4.0f, -10.0f);
 glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
 glm::vec3 CamaraPersona(0.0f, 0.0f, 0.0f);  //En esta variable vamos a guardar la ultima posición del personaje 
@@ -80,11 +81,13 @@ float rotaciondoor2 = 180.0f;
 float cont;
 bool banderadoor = false;
 
-//Rotacion columpio
-float rotacionswing = 0.0f;
-float cont2 = 45.0f;
-float cont3 = -42.0f;
-int banderaswing = 0;
+
+float	movAuto_x = 0.0f;
+float   movAuto_z = 0.0f;
+float   movAuto_y = 0.0f;
+float   orienta = 0.0f;
+float   giroLlantas = 0.0f;
+
 
 void getResolution()
 {
@@ -160,27 +163,32 @@ void animate(void)
 {
 	//Cuando la luz va de 0 a 1.5 vamos a tener la bandera de true, la luz ira incrementando de 0.0005 en 0.0005
 	if (tiempoLuz >= 0.0f and tiempoLuz < 1.5f and bandera == true) {
-		tiempoLuz += 0.0005f;
+		tiempoLuz += 0.001f;
 		//Cuando la variable tiempoLuz sea igual a 1.2 el skybox va a cambiar
-		if (tiempoLuz >= 1.2f)
-			cambiobox = 1;  //Dia
+		if (tiempoLuz >= 1.2f) {
+			if(cambiobox != 2)
+				cambiobox = 1;  //Dia
+			Noche = 0.0f;
+		}
 	}
 	//Cuando la variable llegue a 1.5 la bandera va a cambiar a false
 	if (tiempoLuz >= 1.5f and bandera == true) {
 		bandera = false;
-		tiempoLuz -= 0.0005f;
+		tiempoLuz -= 0.001f;
 	}
 	//Cuando la bandera cambia ira de manera inversa, de 1.5 a 0
 	if (tiempoLuz >= 0.0f and tiempoLuz < 1.5f and bandera == false) {
-		tiempoLuz -= 0.0005f;
+		tiempoLuz -= 0.001f;
 		//Cuando la variable sea 0.7 el skybox cambiará a la noche
-		if (tiempoLuz <= 0.7f)
+		if (tiempoLuz <= 0.7f) {
 			cambiobox = 2;  //Noche
+			Noche = 1.0f;
+		}
 	}
 	//Cuando llegue a 0 la bandera va a cambiar y se repetirá todo el ciclo
 	if (tiempoLuz <= 0.0f and bandera == false) {
 		bandera = true;
-		tiempoLuz += 0.0005f;
+		tiempoLuz += 0.001f;
 	}
 }
 
@@ -199,8 +207,7 @@ void animatedoor(void)
 		rotaciondoor2 += 0.3f;
 	}
 }
-
-void animatecolumpio(void)
+/*void animatecolumpio(void)
 {
 	switch (banderaswing)
 	{
@@ -243,7 +250,7 @@ void animatecolumpio(void)
 		default:
 			break;
 	}
-}
+}*/
 
 
 int main()
@@ -345,16 +352,16 @@ int main()
 	Model escenario_M("resources/objects/piso/textura_escenario.obj");
 	Model calle_M("resources/objects/piso/calle.obj");
 	Model calleBanqueta_M("resources/objects/piso/calles_banquetas_unosolo.obj");
-	//Model paredes_M("resources/objects/paredes/paredes.obj");
-	//Model paredes2_M("resources/objects/paredes/paredes2.obj");
-	//Model allbotebasura_M("resources/objects/mobiliario/all_botesbasura.obj");
-	//Model allbotebasura2_M("resources/objects/mobiliario/all_botesbasura2.obj");
-	//Model allbancas_M("resources/objects/bancas/all_bancas.obj");
-	//Model caseta_M("resources/objects/caseta/caseta.obj");
-	//Model casa_M("resources/objects/casa/all_casa.obj");
-	//Model casa("resources/objects/mansion/new_house.obj");
-	//Model tienda_M("resources/objects/tienda/tienda.obj");
-	//Model restaurante_M("resources/objects/restaurante/comida.obj");
+	Model paredes_M("resources/objects/paredes/paredes.obj");
+	Model paredes2_M("resources/objects/paredes/paredes2.obj");
+	Model allbotebasura_M("resources/objects/mobiliario/all_botesbasura.obj");
+	Model allbotebasura2_M("resources/objects/mobiliario/all_botesbasura2.obj");
+	Model allbancas_M("resources/objects/bancas/all_bancas.obj");
+	Model caseta_M("resources/objects/caseta/caseta.obj");
+	Model casa_M("resources/objects/casa/all_casa.obj");
+	Model casa("resources/objects/mansion/new_house.obj");
+	Model tienda_M("resources/objects/tienda/tienda.obj");
+	Model restaurante_M("resources/objects/restaurante/comida.obj");
 	Model lampara_M("resources/objects/poste/all_lamparas.obj");
 	Model parada_M("resources/objects/paradero/parada.obj");
 	Model alberca_M("resources/objects/alberca/alberca.obj");
@@ -367,8 +374,10 @@ int main()
 	//Model allpalmeras1_M("resources/objects/palmeras/all_palmeras1.obj");
 	//Model allpalmeras2_M("resources/objects/palmeras/all_palmeras2.obj");
 	//Model allpalmeras3_M("resources/objects/palmeras/all_palmeras3.obj");
-	//Model puerta1_M("resources/objects/puertas/puerta1.obj");
-	//Model puerta2_M("resources/objects/puertas/puerta2.obj");
+	Model puerta1_M("resources/objects/puertas/puerta1.obj");
+	Model puerta2_M("resources/objects/puertas/puerta2.obj");
+	Model carro("resources/objects/Lambo/Carroceria.obj");
+	Model llanta("resources/objects/Lambo/Wheel.obj");
 
 
 	//Model arbol1_M("resources/objects/plantas/OC13_Howea_forsteriana_Kentia_Palm/arbol1.obj");
@@ -385,7 +394,7 @@ int main()
 		animate();
 		cambioCamara();
 		animatedoor();
-		animatecolumpio();
+		//animatecolumpio();
 
 		// per-frame time logic
 		// --------------------
@@ -408,21 +417,83 @@ int main()
 		staticShader.setVec3("dirLight.specular", glm::vec3(0.0f, 0.0f, 0.0f));
 
 		//Fuentes de luz posicionales (Replicar los focos, lamparas, etc)
-		staticShader.setVec3("pointLight[0].position", lightPosition);
-		staticShader.setVec3("pointLight[0].ambient", glm::vec3(0.0f, 0.0f, 0.0f));
-		staticShader.setVec3("pointLight[0].diffuse", glm::vec3(0.0f, 0.0f, 0.0f));
-		staticShader.setVec3("pointLight[0].specular", glm::vec3(0.0f, 0.0f, 0.0f));
-		staticShader.setFloat("pointLight[0].constant", 0.08f);
-		staticShader.setFloat("pointLight[0].linear", 0.009f);    // La linear y la constant dicen que tanto se mueve la luz
-		staticShader.setFloat("pointLight[0].quadratic", 0.032f); // intensidad de la luz
+		staticShader.setVec3("pointLight[0].position", glm::vec3(-90.692f, 60.0f, 407.02f));
+		staticShader.setVec3("pointLight[0].ambient", glm::vec3(Noche));
+		staticShader.setVec3("pointLight[0].diffuse", glm::vec3(Noche));
+		staticShader.setFloat("pointLight[0].constant", 0.002f);
+		staticShader.setFloat("pointLight[0].quadratic", 0.0012f); // intensidad de la luz
 
-		staticShader.setVec3("pointLight[1].position", glm::vec3(-80.0, 0.0f, 0.0f));
-		staticShader.setVec3("pointLight[1].ambient", glm::vec3(0.0f, 0.0f, 0.0f));
-		staticShader.setVec3("pointLight[1].diffuse", glm::vec3(0.0f, 0.0f, 0.0f));
-		staticShader.setVec3("pointLight[1].specular", glm::vec3(0.0f, 0.0f, 0.0f));
-		staticShader.setFloat("pointLight[1].constant", 1.0f);
-		staticShader.setFloat("pointLight[1].linear", 0.009f);
-		staticShader.setFloat("pointLight[1].quadratic", 0.032f);
+		staticShader.setVec3("pointLight[1].position", glm::vec3(466.18f, 60.0f, 409.2f));
+		staticShader.setVec3("pointLight[1].ambient", glm::vec3(Noche));
+		staticShader.setVec3("pointLight[1].diffuse", glm::vec3(Noche));
+		staticShader.setFloat("pointLight[1].constant", 0.002f);
+		staticShader.setFloat("pointLight[1].quadratic", 0.0012f); // intensidad de la luz
+
+		staticShader.setVec3("pointLight[2].position", glm::vec3(-301.64f, 60.0f, 407.008f));
+		staticShader.setVec3("pointLight[2].ambient", glm::vec3(Noche));
+		staticShader.setVec3("pointLight[2].diffuse", glm::vec3(Noche));
+		staticShader.setFloat("pointLight[2].constant", 0.002f);
+		staticShader.setFloat("pointLight[2].quadratic", 0.0012f); // intensidad de la luz
+
+		staticShader.setVec3("pointLight[3].position", glm::vec3(-113.626f, 60.0f, 185.486f));
+		staticShader.setVec3("pointLight[3].ambient", glm::vec3(Noche));
+		staticShader.setVec3("pointLight[3].diffuse", glm::vec3(Noche));
+		staticShader.setFloat("pointLight[3].constant", 0.002f);
+		staticShader.setFloat("pointLight[3].quadratic", 0.0012f); // intensidad de la luz
+
+		staticShader.setVec3("pointLight[4].position", glm::vec3(-87.99f, 60.0f, 57.306f));
+		staticShader.setVec3("pointLight[4].ambient", glm::vec3(Noche));
+		staticShader.setVec3("pointLight[4].diffuse", glm::vec3(Noche));
+		staticShader.setFloat("pointLight[4].constant", 0.002f);
+		staticShader.setFloat("pointLight[4].quadratic", 0.0012f); // intensidad de la luz
+
+		staticShader.setVec3("pointLight[5].position", glm::vec3(-204.98f, 60.0f, 7.5526f));
+		staticShader.setVec3("pointLight[5].ambient", glm::vec3(Noche));
+		staticShader.setVec3("pointLight[5].diffuse", glm::vec3(Noche));
+		staticShader.setFloat("pointLight[5].constant", 0.002f);
+		staticShader.setFloat("pointLight[5].quadratic", 0.0012f); // intensidad de la luz
+
+		staticShader.setVec3("pointLight[6].position", glm::vec3(-345.28f, 60.0f, 73.428f));
+		staticShader.setVec3("pointLight[6].ambient", glm::vec3(Noche));
+		staticShader.setVec3("pointLight[6].diffuse", glm::vec3(Noche));
+		staticShader.setFloat("pointLight[6].constant", 0.002f);
+		staticShader.setFloat("pointLight[6].quadratic", 0.0012f); // intensidad de la luz
+
+		staticShader.setVec3("pointLight[7].position", glm::vec3(-267.68f, 60.0f, -153.78f));
+		staticShader.setVec3("pointLight[7].ambient", glm::vec3(Noche));
+		staticShader.setVec3("pointLight[7].diffuse", glm::vec3(Noche));
+		staticShader.setFloat("pointLight[7].constant", 0.002f);
+		staticShader.setFloat("pointLight[7].quadratic", 0.0012f); // intensidad de la luz
+
+		staticShader.setVec3("pointLight[8].position", glm::vec3(-447.18f, 60.0f, -375.28f));
+		staticShader.setVec3("pointLight[8].ambient", glm::vec3(Noche));
+		staticShader.setVec3("pointLight[8].diffuse", glm::vec3(Noche));
+		staticShader.setFloat("pointLight[8].constant", 0.002f);
+		staticShader.setFloat("pointLight[8].quadratic", 0.0012f); // intensidad de la luz
+
+		staticShader.setVec3("pointLight[9].position", glm::vec3(85.508f, 60.0f, -278.88f));
+		staticShader.setVec3("pointLight[9].ambient", glm::vec3(Noche));
+		staticShader.setVec3("pointLight[9].diffuse", glm::vec3(Noche));
+		staticShader.setFloat("pointLight[9].constant", 0.002f);
+		staticShader.setFloat("pointLight[9].quadratic", 0.0012f); // intensidad de la luz
+
+		staticShader.setVec3("pointLight[10].position", glm::vec3(277.32f, 60.0f, -277.4f));
+		staticShader.setVec3("pointLight[10].ambient", glm::vec3(Noche));
+		staticShader.setVec3("pointLight[10].diffuse", glm::vec3(Noche));
+		staticShader.setFloat("pointLight[10].constant", 0.002f);
+		staticShader.setFloat("pointLight[10].quadratic", 0.0012f); // intensidad de la luz
+
+		staticShader.setVec3("pointLight[11].position", glm::vec3(277.06f, 60.0f, -86.096f));
+		staticShader.setVec3("pointLight[11].ambient", glm::vec3(Noche));
+		staticShader.setVec3("pointLight[11].diffuse", glm::vec3(Noche));
+		staticShader.setFloat("pointLight[11].constant", 0.002f);
+		staticShader.setFloat("pointLight[11].quadratic", 0.0012f); // intensidad de la luz
+
+		staticShader.setVec3("pointLight[12].position", glm::vec3(86.034f, 60.0f, -88.108f));
+		staticShader.setVec3("pointLight[12].ambient", glm::vec3(Noche));
+		staticShader.setVec3("pointLight[12].diffuse", glm::vec3(Noche));
+		staticShader.setFloat("pointLight[12].constant", 0.002f);
+		staticShader.setFloat("pointLight[12].quadratic", 0.0012f); // intensidad de la luz
 		
 		staticShader.setFloat("material_shininess", 32.0f);
 
@@ -457,7 +528,7 @@ int main()
 		animShader.setVec3("viewPos", camera.Position);
 
 		// -------------------------------------------------
-		// Personaje principal - Patricio animado
+		// Personaje principal - animado
 		// -------------------------------------------------
 		model = glm::translate(glm::mat4(1.0f),glm::vec3(PosX + PersonaX1, 10.0f,  PosY + PersonaX2));
 		model = glm::rotate(model, glm::radians(rotacion), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -465,7 +536,7 @@ int main()
 		animShader.setMat4("model", model);
 		personaje.Draw(animShader);
 
-
+		
 
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Escenario
@@ -474,6 +545,42 @@ int main()
 		staticShader.setMat4("projection", projection);
 		staticShader.setMat4("view", view);
 
+		// -------------------------------------------------------------------------------------------------------------------------
+		// Carro
+		// -------------------------------------------------------------------------------------------------------------------------
+		model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-450.0f + movAuto_x, 1.0f + movAuto_y, -200.0f + movAuto_z));
+		tmp = model = glm::rotate(model, glm::radians(orienta), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.1f));
+		staticShader.setMat4("model", model);
+		carro.Draw(staticShader);
+
+		model = glm::translate(tmp, glm::vec3(8.5f, 2.5f, 12.9f));
+		model = glm::rotate(model, glm::radians(giroLlantas), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.1f));
+		staticShader.setMat4("model", model);
+		llanta.Draw(staticShader);	//Izq delantera
+
+		model = glm::translate(tmp, glm::vec3(-8.5f, 2.5f, 12.9f));
+		model = glm::rotate(model, glm::radians(giroLlantas), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.1f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		llanta.Draw(staticShader);	//Der delantera
+
+		model = glm::translate(tmp, glm::vec3(-8.5f, 2.5f, -14.5f));
+		model = glm::rotate(model, glm::radians(giroLlantas), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.1f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		llanta.Draw(staticShader);	//Der trasera
+
+		model = glm::translate(tmp, glm::vec3(8.5f, 2.5f, -14.5f));
+		model = glm::rotate(model, glm::radians(giroLlantas), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.1f));
+		staticShader.setMat4("model", model);
+		llanta.Draw(staticShader);	//Izq trase
+		//------------------------------------------------------------------------------------------
 
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
@@ -487,7 +594,7 @@ int main()
 		staticShader.setMat4("model", model);
 		calleBanqueta_M.Draw(staticShader);
 
-		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
@@ -497,9 +604,9 @@ int main()
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
-		paredes2_M.Draw(staticShader);*/
+		paredes2_M.Draw(staticShader);
 
-		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
@@ -534,9 +641,9 @@ int main()
 		model = glm::scale(model, glm::vec3(0.3f,0.4f,0.3f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
-		casa.Draw(staticShader);*/
+		casa.Draw(staticShader);
 
-		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
@@ -546,7 +653,7 @@ int main()
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
-		restaurante_M.Draw(staticShader);*/
+		restaurante_M.Draw(staticShader);
 		
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
@@ -589,7 +696,7 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		puesto_M.Draw(staticShader);
-
+		/*
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 35.0f, -10.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -601,7 +708,7 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, glm::radians(rotacionswing), glm::vec3(0.0f, 0.0f, 1.0f));
 		staticShader.setMat4("model", model);
-		asientocolumpio_M.Draw(staticShader);
+		asientocolumpio_M.Draw(staticShader);*/
 
 		/*Palmeras
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -623,7 +730,7 @@ int main()
 		allpalmeras3_M.Draw(staticShader);
 		*/
 
-		/*model = glm::translate(glm::mat4(1.0f), glm::vec3(-101.0f, 0.0f, 270.0f));
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(-101.0f, 0.0f, 270.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(rotaciondoor1), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
@@ -633,7 +740,7 @@ int main()
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(rotaciondoor2), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
-		puerta2_M.Draw(staticShader);*/
+		puerta2_M.Draw(staticShader);
 
 		/*Palmera prueba
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -739,11 +846,6 @@ void my_input(GLFWwindow *window, int key, int scancode, int action, int mode)
 		}
 	}
 
-	//To Configure Model
-	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
-		lightPosition.x++;
-	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
-		lightPosition.x--;
 
 	//Camara aerea y tercera persona
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
@@ -758,8 +860,8 @@ void my_input(GLFWwindow *window, int key, int scancode, int action, int mode)
 		banderadoor = false;
 
 	//Animacion columpio
-	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
-		banderaswing = 1;
+	//if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
+	//	banderaswing = 1;
 
 }
 
