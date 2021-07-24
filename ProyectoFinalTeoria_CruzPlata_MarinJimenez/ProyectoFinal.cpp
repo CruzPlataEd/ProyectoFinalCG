@@ -87,6 +87,13 @@ float cont2 = 45.0f;
 float cont3 = -42.0f;
 int banderaswing = 0;
 
+//Variable animacion piña
+int estadospin = 1;
+float posXpin = -220.0f;
+float posYpin = 40.0f;
+float posZpin = -37.0f;
+glm::vec3 movepin = glm::vec3(0.0f, 0.0f, 0.0f);
+
 float	movAuto_x = 0.0f;
 float   movAuto_z = 0.0f;
 float   movAuto_y = 0.0f;
@@ -259,6 +266,88 @@ void animatecolumpio(void)
 }
 
 
+void animatepin(void)
+{	
+	if (true) 
+	{
+		switch (estadospin)
+		{
+			case 1:
+				if (posZpin < -30.0f)
+					posZpin += 0.1f;
+				else
+					estadospin = 2;
+				break;
+			case 2:
+				if (posXpin > -227.0f and posZpin > -37.0f) 
+				{
+					posXpin -= 0.1f;
+					posZpin -= 0.1f;
+					posYpin -= 0.08f;
+				}
+				else
+					estadospin = 3;
+				break;
+			case 3:
+				if (posXpin < -220.0f and posZpin > -44.0f)
+				{
+					posXpin += 0.1f;
+					posZpin -= 0.1f;
+					posYpin -= 0.08f;
+				}
+				else
+					estadospin = 4;
+				break;
+			case 4:
+				if (posXpin < -213.0f and posZpin < -37.0f)
+				{
+					posXpin += 0.1f;
+					posZpin += 0.1f;
+					posYpin -= 0.07f;
+				}
+				else
+					estadospin = 5;
+				break;
+			case 5:
+				if (posXpin > -220.0f and posZpin < -30.0f)
+				{
+					posXpin -= 0.1f;
+					posZpin += 0.1f;
+					posYpin -= 0.07f;
+				}
+				else
+					estadospin = 6;
+				break;
+			case 6:
+				if (posZpin > -37.0f)
+				{
+					posZpin -= 0.1f;
+				}
+				else
+					estadospin = 7;
+				break;
+			case 7:
+				if (posYpin < 30.0f)
+				{
+					posYpin += 0.1f;
+				}
+				else
+					estadospin = 8;
+				break;
+			case 8:
+				posXpin = -220.0f;
+				posYpin = 40.0f;
+				posZpin = -37.0f;
+				estadospin = 1;
+				break;
+
+			default:
+				break;
+		}
+	}
+	movepin = glm::vec3(posXpin, posYpin, posZpin);
+}
+
 int main()
 {
 	glfwInit();
@@ -385,8 +474,11 @@ int main()
 	Model carro("resources/objects/Lambo/Carroceria.obj");
 	Model llanta("resources/objects/Lambo/Wheel.obj");
 	Model nube_M("resources/objects/nube/Nube.obj");
+	Model anuncio_M("resources/objects/anuncio/anuncio.obj");
+	Model pina_M("resources/objects/anuncio/pina.obj");
 
 	//Model arbol1_M("resources/objects/plantas/OC13_Howea_forsteriana_Kentia_Palm/arbol1.obj");
+
 
 
 	ModelAnim personaje("resources/objects/Personaje/Walking.dae");
@@ -401,6 +493,7 @@ int main()
 		cambioCamara();
 		animatedoor();
 		animatecolumpio();
+		animatepin();
 
 		// per-frame time logic
 		// --------------------
@@ -599,7 +692,7 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		calleBanqueta_M.Draw(staticShader);
-
+		
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -714,7 +807,7 @@ int main()
 		model = glm::rotate(model, glm::radians(rotacionswing), glm::vec3(0.0f, 0.0f, 1.0f));
 		staticShader.setMat4("model", model);
 		asientocolumpio_M.Draw(staticShader);
-
+		
 		/*Palmeras
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
@@ -734,7 +827,6 @@ int main()
 		staticShader.setMat4("model", model);
 		allpalmeras3_M.Draw(staticShader);
 		*/
-
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(-101.0f, 0.0f, 270.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(rotaciondoor1), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -746,6 +838,18 @@ int main()
 		model = glm::rotate(model, glm::radians(rotaciondoor2), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		puerta2_M.Draw(staticShader);
+		
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		anuncio_M.Draw(staticShader);
+		
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(movepin));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		pina_M.Draw(staticShader);
 
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
