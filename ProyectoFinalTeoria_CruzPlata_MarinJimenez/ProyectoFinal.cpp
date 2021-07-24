@@ -384,7 +384,7 @@ int main()
 	Model puerta2_M("resources/objects/puertas/puerta2.obj");
 	Model carro("resources/objects/Lambo/Carroceria.obj");
 	Model llanta("resources/objects/Lambo/Wheel.obj");
-
+	Model nube_M("resources/objects/nube/Nube.obj");
 
 	//Model arbol1_M("resources/objects/plantas/OC13_Howea_forsteriana_Kentia_Palm/arbol1.obj");
 
@@ -746,6 +746,12 @@ int main()
 		model = glm::rotate(model, glm::radians(rotaciondoor2), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		puerta2_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		nube_M.Draw(staticShader);
 
 		/*Palmera prueba
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
