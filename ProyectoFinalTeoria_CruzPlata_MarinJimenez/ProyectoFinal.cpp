@@ -66,6 +66,7 @@ lastFrame = 0.0f;
 float Noche = 1.0f;
 glm::vec3 lightPosition(0.0f, 4.0f, -10.0f);
 glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
+glm::vec3 posicionCarro(0.0f, 0.0f, 0.0f);
 
 glm::vec3 CamaraPersona(0.0f, 0.0f, 0.0f);  //En esta variable vamos a guardar la ultima posición del personaje 
 		//Guardarlo va a servir para que cuando volvamos de la camara aerea sepamos donde se quedó el personaje
@@ -90,12 +91,68 @@ float cont2 = 45.0f;
 float cont3 = -42.0f;
 int banderaswing = 0;
 
-float	movAuto_x = 0.0f;
-float   movAuto_z = 0.0f;
-float   movAuto_y = 0.0f;
-float   orienta = 0.0f;
-float   giroLlantas = 0.0f;
 
+//Animacion carro
+bool Inicio = false;
+float   orienta = 0.0f;
+float	angulo = 90.0f;
+float   giroLlantas = 0.0f;
+float	movAuto_x = -400.0f;
+float	movAuto_y = 1.0f;
+float	movAuto_z = 450.0f;
+
+
+//Keyframes (Manipulación y dibujo)
+float	movNube_x = 0.0f;
+float	movNube_y = 0.0f;
+float	movNube_z = 0.0f;
+
+float	movNube_xInc = 0.0f;
+float	movNube_yInc = 0.0f;
+float	movNube_zInc = 0.0f;
+
+
+#define MAX_FRAMES 9
+int i_max_steps = 60;
+int i_curr_steps = 0;
+typedef struct _frame
+{
+	//Variables para GUARDAR Key Frames
+	float movNube_x;		//Variable para PosicionX
+	float movNube_y;		//Variable para PosicionY
+	float movNube_z;		//Variable para PosicionZ
+}FRAME;
+
+FRAME KeyFrame[MAX_FRAMES];
+int FrameIndex = 6;			//introducir datos
+bool play = false;
+int playIndex = 0;
+
+void saveFrame(void)
+{
+	//printf("frameindex %d\n", FrameIndex);
+	std::cout << "Frame Index = " << FrameIndex << std::endl;
+
+	KeyFrame[FrameIndex].movNube_x = movNube_x;
+	KeyFrame[FrameIndex].movNube_y = movNube_y;
+	KeyFrame[FrameIndex].movNube_z = movNube_z;
+
+	FrameIndex++;
+}
+
+void resetElements(void)
+{
+	movNube_x = KeyFrame[0].movNube_x;
+	movNube_y = KeyFrame[0].movNube_y;
+	movNube_z = KeyFrame[0].movNube_z;
+}
+
+void interpolation(void)
+{
+	movNube_xInc = (KeyFrame[playIndex + 1].movNube_x - KeyFrame[playIndex].movNube_x) / i_max_steps;
+	movNube_yInc = (KeyFrame[playIndex + 1].movNube_y - KeyFrame[playIndex].movNube_y) / i_max_steps;
+	movNube_zInc = (KeyFrame[playIndex + 1].movNube_z - KeyFrame[playIndex].movNube_z) / i_max_steps;
+}
 
 void getResolution()
 {
@@ -197,6 +254,76 @@ void animate(void)
 	if (tiempoLuz <= 0.0f and bandera == false) {
 		bandera = true;
 		tiempoLuz += 0.001f;
+	}
+
+	if (play)
+	{
+		if (i_curr_steps >= i_max_steps) //end of animation between frames?
+		{
+			playIndex++;
+			if (playIndex > FrameIndex - 2)	//end of total animation?
+			{
+				std::cout << "Animation ended" << std::endl;
+				//printf("termina anim\n");
+				playIndex = 0;
+				play = false;
+			}
+			else //Next frame interpolations
+			{
+				i_curr_steps = 0; //Reset counter
+								  //Interpolation
+				interpolation();
+			}
+		}
+		else
+		{
+			//Draw animation
+			movNube_x += movNube_xInc;
+			movNube_y += movNube_yInc;
+			movNube_z += movNube_zInc;
+
+			i_curr_steps++;
+		}
+		
+
+	}
+}
+
+void animacionCarro(void) {
+	if (Inicio == true) {
+		if (angulo == 90.0f) { //Sig Coordenada (-51,1,450)
+			if(movAuto_x < -51)
+				movAuto_x += 2.0f;
+			if (movAuto_x >= -51)
+				angulo = 180.0f;
+		}
+		if (angulo == 180.0f) {
+			if (movAuto_z > 278)
+				movAuto_z -= 1.0f;
+			if (movAuto_z == 278)
+				angulo = 200.0f;
+		}
+		if (angulo == 200.0f) {
+			if (movAuto_x > -107)
+				movAuto_x -= 1.0f;
+			if (movAuto_z > 82)
+				movAuto_z -= 3.0f;
+			if (movAuto_x == -107 and movAuto_z == 82)
+				angulo = 180.0f;
+		}
+		if (movAuto_x == -107 and movAuto_z > 38) {
+			if (movAuto_z > 38)
+				movAuto_z -= 1.0f;
+			if (movAuto_z == 38)
+				angulo = 105.0f;
+		}
+		if (angulo == 105) {
+			if (movAuto_x < 96)
+				movAuto_x += 1.0f;
+			if (movAuto_z > -51)
+				movAuto_z -= 0.5f;
+		}
+
 	}
 }
 
@@ -385,15 +512,16 @@ int main()
 	//Model allpalmeras3_M("resources/objects/palmeras/all_palmeras3.obj");
 	Model puerta1_M("resources/objects/puertas/puerta1.obj");
 	Model puerta2_M("resources/objects/puertas/puerta2.obj");
-	Model carro("resources/objects/Lambo/Carroceria.obj");
-	Model llanta("resources/objects/Lambo/Wheel.obj");
-
-
+	Model carro("resources/objects/Golf/sportcar.017.obj");
 	//Model arbol1_M("resources/objects/plantas/OC13_Howea_forsteriana_Kentia_Palm/arbol1.obj");
-
 
 	ModelAnim personaje("resources/objects/Personaje/Walking.dae");
 	personaje.initShaders(animShader.ID);
+
+	KeyFrame[0].movNube_x = 0;
+	KeyFrame[0].movNube_y = 0;
+	KeyFrame[0].movNube_z = 0;
+
 
 	// render loop
 	// -----------
@@ -403,6 +531,7 @@ int main()
 		animate();
 		cambioCamara();
 		animatedoor();
+		animacionCarro();
 		animatecolumpio();
 
 		// per-frame time logic
@@ -555,38 +684,12 @@ int main()
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Carro
 		// -------------------------------------------------------------------------------------------------------------------------
-		model = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::translate(model, glm::vec3(-450.0f + movAuto_x, 1.0f + movAuto_y, -200.0f + movAuto_z));
-		tmp = model = glm::rotate(model, glm::radians(orienta), glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.1f));
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(movAuto_x, movAuto_y, movAuto_z));
+		model = glm::scale(model, glm::vec3(12.0f));
+		model = glm::rotate(model, glm::radians(angulo), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		carro.Draw(staticShader);
 
-		model = glm::translate(tmp, glm::vec3(8.5f, 2.5f, 12.9f));
-		model = glm::rotate(model, glm::radians(giroLlantas), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.1f));
-		staticShader.setMat4("model", model);
-		llanta.Draw(staticShader);	//Izq delantera
-
-		model = glm::translate(tmp, glm::vec3(-8.5f, 2.5f, 12.9f));
-		model = glm::rotate(model, glm::radians(giroLlantas), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.1f));
-		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		staticShader.setMat4("model", model);
-		llanta.Draw(staticShader);	//Der delantera
-
-		model = glm::translate(tmp, glm::vec3(-8.5f, 2.5f, -14.5f));
-		model = glm::rotate(model, glm::radians(giroLlantas), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.1f));
-		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		staticShader.setMat4("model", model);
-		llanta.Draw(staticShader);	//Der trasera
-
-		model = glm::translate(tmp, glm::vec3(8.5f, 2.5f, -14.5f));
-		model = glm::rotate(model, glm::radians(giroLlantas), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.1f));
-		staticShader.setMat4("model", model);
-		llanta.Draw(staticShader);	//Izq trase
 		//------------------------------------------------------------------------------------------
 
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -868,6 +971,29 @@ void my_input(GLFWwindow *window, int key, int scancode, int action, int mode)
 	//Animacion columpio
 	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
 		banderaswing = 1;
+
+	if (key == GLFW_KEY_I && action == GLFW_PRESS)
+	{
+		if (play == false && (FrameIndex > 1))
+		{
+			std::cout << "Play animation" << std::endl;
+			resetElements();
+			//First Interpolation				
+			interpolation();
+
+			play = true;
+			playIndex = 0;
+			i_curr_steps = 0;
+		}
+		else
+		{
+			play = false;
+			std::cout << "Not enough Key Frames" << std::endl;
+		}
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
+		Inicio = true;
 
 }
 
