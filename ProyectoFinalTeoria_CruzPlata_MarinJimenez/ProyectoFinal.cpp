@@ -64,6 +64,7 @@ lastFrame = 0.0f;
 
 //Lighting
 float Noche = 1.0f;
+float Noche2 = 0.0f;
 glm::vec3 lightPosition(0.0f, 4.0f, -10.0f);
 glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
 glm::vec3 posicionCarro(0.0f, 0.0f, 0.0f);
@@ -94,12 +95,21 @@ int banderaswing = 0;
 
 //Animacion carro
 bool Inicio = false;
+
+//Variable animacion piña
+int estadospin = 1;
+float posXpin = -220.0f;
+float posYpin = 40.0f;
+float posZpin = -37.0f;
+glm::vec3 movepin = glm::vec3(0.0f, 0.0f, 0.0f);
+
 float   orienta = 0.0f;
 float	angulo = 90.0f;
 float   giroLlantas = 0.0f;
 float	movAuto_x = -400.0f;
 float	movAuto_y = 1.0f;
 float	movAuto_z = 450.0f;
+bool	circuito = false;
 
 
 //Keyframes (Manipulación y dibujo)
@@ -124,7 +134,7 @@ typedef struct _frame
 }FRAME;
 
 FRAME KeyFrame[MAX_FRAMES];
-int FrameIndex = 6;			//introducir datos
+int FrameIndex = 9;			//introducir datos
 bool play = false;
 int playIndex = 0;
 
@@ -291,39 +301,70 @@ void animate(void)
 
 void animacionCarro(void) {
 	if (Inicio == true) {
-		if (angulo == 90.0f) { //Sig Coordenada (-51,1,450)
-			if(movAuto_x < -51)
-				movAuto_x += 2.0f;
-			if (movAuto_x >= -51)
-				angulo = 180.0f;
+		if (circuito == false) {
+			if (angulo == 90.0f) { //Sig Coordenada (-51,1,450)
+				if (movAuto_x < -51)
+					movAuto_x += 2.0f;
+				if (movAuto_x >= -51)
+					angulo = 180.0f;
+			}
+			if (angulo == 180.0f and rotaciondoor1 > 90) {
+				if (movAuto_z > 278)
+					movAuto_z -= 1.0f;
+				if (movAuto_z == 278)
+					angulo = 200.0f;
+			}
+			if (angulo == 200.0f) {
+				if (movAuto_x > -107)
+					movAuto_x -= 1.0f;
+				if (movAuto_z > 82)
+					movAuto_z -= 3.0f;
+				if (movAuto_x == -107 and movAuto_z == 82)
+					angulo = 180.0f;
+			}
+			if (movAuto_x == -107 and movAuto_z > 38) {
+				if (movAuto_z > 38)
+					movAuto_z -= 1.0f;
+				if (movAuto_z == 38)
+					angulo = 105.0f;
+			}
+			if (angulo == 105) {
+				if (movAuto_x < 96)
+					movAuto_x += 1.0f;
+				if (movAuto_z > -51)
+					movAuto_z -= 0.5f;
+				if (movAuto_x == 96 and movAuto_z == -51) {
+					circuito = true;
+					angulo = 90;
+				}
+			}
 		}
-		if (angulo == 180.0f) {
-			if (movAuto_z > 278)
-				movAuto_z -= 1.0f;
-			if (movAuto_z == 278)
-				angulo = 200.0f;
+		if (circuito == true) {
+			if (angulo == 90) {
+				if (movAuto_x < 307)
+					movAuto_x += 1.0f;
+				if (movAuto_x == 307)
+					angulo = 180;
+			}
+			if (angulo == 180) {
+				if (movAuto_z > -310)
+					movAuto_z -= 1.0f;
+				if (movAuto_z == -310)
+					angulo = 270;
+			}
+			if (angulo == 270) {
+				if (movAuto_x > 56)
+					movAuto_x -= 1.0f;
+				if (movAuto_x == 56)
+					angulo = 0;
+			}
+			if (angulo == 0) {
+				if (movAuto_z < -51)
+					movAuto_z += 1.0f;
+				if (movAuto_z == -51)
+					angulo = 90;
+			}
 		}
-		if (angulo == 200.0f) {
-			if (movAuto_x > -107)
-				movAuto_x -= 1.0f;
-			if (movAuto_z > 82)
-				movAuto_z -= 3.0f;
-			if (movAuto_x == -107 and movAuto_z == 82)
-				angulo = 180.0f;
-		}
-		if (movAuto_x == -107 and movAuto_z > 38) {
-			if (movAuto_z > 38)
-				movAuto_z -= 1.0f;
-			if (movAuto_z == 38)
-				angulo = 105.0f;
-		}
-		if (angulo == 105) {
-			if (movAuto_x < 96)
-				movAuto_x += 1.0f;
-			if (movAuto_z > -51)
-				movAuto_z -= 0.5f;
-		}
-
 	}
 }
 
@@ -388,6 +429,88 @@ void animatecolumpio(void)
 	}
 }
 
+
+void animatepin(void)
+{	
+	if (true) 
+	{
+		switch (estadospin)
+		{
+			case 1:
+				if (posZpin < -30.0f)
+					posZpin += 0.1f;
+				else
+					estadospin = 2;
+				break;
+			case 2:
+				if (posXpin > -227.0f and posZpin > -37.0f) 
+				{
+					posXpin -= 0.1f;
+					posZpin -= 0.1f;
+					posYpin -= 0.08f;
+				}
+				else
+					estadospin = 3;
+				break;
+			case 3:
+				if (posXpin < -220.0f and posZpin > -44.0f)
+				{
+					posXpin += 0.1f;
+					posZpin -= 0.1f;
+					posYpin -= 0.08f;
+				}
+				else
+					estadospin = 4;
+				break;
+			case 4:
+				if (posXpin < -213.0f and posZpin < -37.0f)
+				{
+					posXpin += 0.1f;
+					posZpin += 0.1f;
+					posYpin -= 0.07f;
+				}
+				else
+					estadospin = 5;
+				break;
+			case 5:
+				if (posXpin > -220.0f and posZpin < -30.0f)
+				{
+					posXpin -= 0.1f;
+					posZpin += 0.1f;
+					posYpin -= 0.07f;
+				}
+				else
+					estadospin = 6;
+				break;
+			case 6:
+				if (posZpin > -37.0f)
+				{
+					posZpin -= 0.1f;
+				}
+				else
+					estadospin = 7;
+				break;
+			case 7:
+				if (posYpin < 30.0f)
+				{
+					posYpin += 0.1f;
+				}
+				else
+					estadospin = 8;
+				break;
+			case 8:
+				posXpin = -220.0f;
+				posYpin = 40.0f;
+				posZpin = -37.0f;
+				estadospin = 1;
+				break;
+
+			default:
+				break;
+		}
+	}
+	movepin = glm::vec3(posXpin, posYpin, posZpin);
+}
 
 int main()
 {
@@ -513,15 +636,49 @@ int main()
 	Model puerta1_M("resources/objects/puertas/puerta1.obj");
 	Model puerta2_M("resources/objects/puertas/puerta2.obj");
 	Model carro("resources/objects/Golf/sportcar.017.obj");
+	Model nube_M("resources/objects/nube/Nube.obj");
+	Model anuncio_M("resources/objects/anuncio/anuncio.obj");
+	Model pina_M("resources/objects/anuncio/pina.obj");
 	//Model arbol1_M("resources/objects/plantas/OC13_Howea_forsteriana_Kentia_Palm/arbol1.obj");
 
 	ModelAnim personaje("resources/objects/Personaje/Walking.dae");
 	personaje.initShaders(animShader.ID);
 
-	KeyFrame[0].movNube_x = 0;
+	KeyFrame[0].movNube_x = -150;
 	KeyFrame[0].movNube_y = 0;
 	KeyFrame[0].movNube_z = 0;
 
+	KeyFrame[1].movNube_x = -75;
+	KeyFrame[1].movNube_y = 0;
+	KeyFrame[1].movNube_z = 75;
+
+	KeyFrame[2].movNube_x = 0;
+	KeyFrame[2].movNube_y = 0;
+	KeyFrame[2].movNube_z = 150;
+
+	KeyFrame[3].movNube_x = 75;
+	KeyFrame[3].movNube_y = 0;
+	KeyFrame[3].movNube_z = 75;
+
+	KeyFrame[4].movNube_x = 150;
+	KeyFrame[4].movNube_y = 0;
+	KeyFrame[4].movNube_z = 0;
+
+	KeyFrame[5].movNube_x = 75;
+	KeyFrame[5].movNube_y = 0;
+	KeyFrame[5].movNube_z = -75;
+
+	KeyFrame[6].movNube_x = 0;
+	KeyFrame[6].movNube_y = 0;
+	KeyFrame[6].movNube_z = -150;
+
+	KeyFrame[7].movNube_x = -75;
+	KeyFrame[7].movNube_y = 0;
+	KeyFrame[7].movNube_z = -75;
+
+	KeyFrame[8].movNube_x = -150;
+	KeyFrame[8].movNube_y = 0;
+	KeyFrame[8].movNube_z = 0;
 
 	// render loop
 	// -----------
@@ -533,6 +690,7 @@ int main()
 		animatedoor();
 		animacionCarro();
 		animatecolumpio();
+		animatepin();
 
 		// per-frame time logic
 		// --------------------
@@ -598,14 +756,14 @@ int main()
 		staticShader.setFloat("pointLight[6].quadratic", 0.0012f); // intensidad de la luz
 
 		staticShader.setVec3("pointLight[7].position", glm::vec3(-267.68f, 60.0f, -153.78f));
-		staticShader.setVec3("pointLight[7].ambient", glm::vec3(Noche));
-		staticShader.setVec3("pointLight[7].diffuse", glm::vec3(Noche));
+		staticShader.setVec3("pointLight[7].ambient", glm::vec3(Noche2));
+		staticShader.setVec3("pointLight[7].diffuse", glm::vec3(Noche2));
 		staticShader.setFloat("pointLight[7].constant", 0.002f);
 		staticShader.setFloat("pointLight[7].quadratic", 0.0012f); // intensidad de la luz
 
 		staticShader.setVec3("pointLight[8].position", glm::vec3(-447.18f, 60.0f, -375.28f));
-		staticShader.setVec3("pointLight[8].ambient", glm::vec3(Noche));
-		staticShader.setVec3("pointLight[8].diffuse", glm::vec3(Noche));
+		staticShader.setVec3("pointLight[8].ambient", glm::vec3(Noche2));
+		staticShader.setVec3("pointLight[8].diffuse", glm::vec3(Noche2));
 		staticShader.setFloat("pointLight[8].constant", 0.002f);
 		staticShader.setFloat("pointLight[8].quadratic", 0.0012f); // intensidad de la luz
 
@@ -703,7 +861,7 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		calleBanqueta_M.Draw(staticShader);
-
+		
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -806,19 +964,19 @@ int main()
 		staticShader.setMat4("model", model);
 		puesto_M.Draw(staticShader);
 		
-		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 35.0f, -10.0f));
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(-205.0f, 30.0f, 125.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
-		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		basecolumpio_M.Draw(staticShader);
 
-		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 35.0f, -10.0f));
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(-205.0f, 30.0f, 125.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
-		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, glm::radians(rotacionswing), glm::vec3(0.0f, 0.0f, 1.0f));
 		staticShader.setMat4("model", model);
 		asientocolumpio_M.Draw(staticShader);
-
+		
 		/*Palmeras
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
@@ -838,7 +996,6 @@ int main()
 		staticShader.setMat4("model", model);
 		allpalmeras3_M.Draw(staticShader);
 		*/
-
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(-101.0f, 0.0f, 270.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(rotaciondoor1), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -850,6 +1007,24 @@ int main()
 		model = glm::rotate(model, glm::radians(rotaciondoor2), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		puerta2_M.Draw(staticShader);
+		
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		anuncio_M.Draw(staticShader);
+		
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(movepin));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		pina_M.Draw(staticShader);
+
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f+movNube_x, 180.0f, 0.0f+movNube_z));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		nube_M.Draw(staticShader);
 
 		/*Palmera prueba
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -859,16 +1034,6 @@ int main()
 		arbol1_M.Draw(staticShader);*/
 
 
-		// -------------------------------------------------------------------------------------------------------------------------
-		// Caja Transparente --- Siguiente Pr�ctica
-		// -------------------------------------------------------------------------------------------------------------------------
-		/*glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -70.0f));
-		model = glm::scale(model, glm::vec3(5.0f));
-		staticShader.setMat4("model", model);
-		nube.Draw(staticShader);
-		glEnable(GL_BLEND);*/
 		// -------------------------------------------------------------------------------------------------------------------------
 		// Termina Escenario
 		// -------------------------------------------------------------------------------------------------------------------------
@@ -971,6 +1136,11 @@ void my_input(GLFWwindow *window, int key, int scancode, int action, int mode)
 	//Animacion columpio
 	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
 		banderaswing = 1;
+
+	if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS)
+		Noche2 = 1.0f; //Prende el foco de las piscina
+	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+		Noche2 = 0.0f; //Apaga el foco de la piscina
 
 	if (key == GLFW_KEY_I && action == GLFW_PRESS)
 	{
