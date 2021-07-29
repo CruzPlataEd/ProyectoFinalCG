@@ -238,7 +238,7 @@ void animate(void)
 {
 	//Cuando la luz va de 0 a 1.5 vamos a tener la bandera de true, la luz ira incrementando de 0.0005 en 0.0005
 	if (tiempoLuz >= 0.0f and tiempoLuz < 1.5f and bandera == true) {
-		tiempoLuz += 0.001f;
+		tiempoLuz += 0.0005f;
 		//Cuando la variable tiempoLuz sea igual a 1.2 el skybox va a cambiar
 		if (tiempoLuz >= 1.2f) {
 			if(cambiobox != 2)
@@ -249,11 +249,11 @@ void animate(void)
 	//Cuando la variable llegue a 1.5 la bandera va a cambiar a false
 	if (tiempoLuz >= 1.5f and bandera == true) {
 		bandera = false;
-		tiempoLuz -= 0.001f;
+		tiempoLuz -= 0.0005f;
 	}
 	//Cuando la bandera cambia ira de manera inversa, de 1.5 a 0
 	if (tiempoLuz >= 0.0f and tiempoLuz < 1.5f and bandera == false) {
-		tiempoLuz -= 0.001f;
+		tiempoLuz -= 0.0005f;
 		//Cuando la variable sea 0.7 el skybox cambiará a la noche
 		if (tiempoLuz <= 0.7f) {
 			cambiobox = 2;  //Noche
@@ -263,7 +263,7 @@ void animate(void)
 	//Cuando llegue a 0 la bandera va a cambiar y se repetirá todo el ciclo
 	if (tiempoLuz <= 0.0f and bandera == false) {
 		bandera = true;
-		tiempoLuz += 0.001f;
+		tiempoLuz += 0.0005f;
 	}
 
 	if (play)
