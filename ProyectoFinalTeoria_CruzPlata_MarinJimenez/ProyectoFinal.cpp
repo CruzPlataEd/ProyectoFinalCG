@@ -21,6 +21,7 @@
 #include <model.h>
 #include <Skybox.h>
 #include <iostream>
+//#include <irrKlang.h>
 
 using namespace std;
 
@@ -114,6 +115,12 @@ float movAuto_y = 1.0f;
 float movAuto_z = 450.0f;
 bool circuito = false;
 
+//variables para niño
+int estadosnino = 0;
+float posXnino = -342.0f;
+float posZnino = 62.0f;
+float rotanino = 0.0f;
+glm::vec3 movenino = glm::vec3(0.0f, 0.0f, 0.0f);
 
 //Keyframes (Manipulación y dibujo)
 float movNube_x = 0.0f;
@@ -238,14 +245,14 @@ void cambioCamara(void) {
 void animate(void) {
 	//Cuando la luz va de 0 a 1.5 vamos a tener la bandera de true, la luz ira incrementando de 0.0005 en 0.0005
 	if (tiempoLuz == 0.0f) {
-		PlaySound("night2.wav", NULL, SND_SYNC);
+		//PlaySound("night2.wav", NULL, SND_SYNC);
 	}
 	if (tiempoLuz >= 0.0f and tiempoLuz < 1.5f and bandera == true) {
 		tiempoLuz += 0.001f;
 		//Cuando la variable tiempoLuz sea igual a 1.2 el skybox va a cambiar
 		if (tiempoLuz >= 1.2f) {
 			if (cambiobox != 1) {
-				PlaySound("night2.wav", NULL, SND_SYNC);
+				//PlaySound("night2.wav", NULL, SND_SYNC);
 				cambiobox = 1; //Dia
 			}
 			Noche = 0.0f;
@@ -262,7 +269,7 @@ void animate(void) {
 		//Cuando la variable sea 0.7 el skybox cambiará a la noche
 		if (tiempoLuz <= 0.7f) {
 			if (cambiobox != 2) {
-				PlaySound("night2.wav", NULL, SND_SYNC);
+				//PlaySound("night2.wav", NULL, SND_SYNC);
 				cambiobox = 2; //Noche
 			}
 			Noche = 1.0f;
@@ -503,6 +510,99 @@ void animatepin(void) {
 	movepin = glm::vec3(posXpin, posYpin, posZpin);
 }
 
+void animatenino(void) {
+	if (true) {
+		switch (estadosnino) {
+		case 1:
+			rotanino = 0.0f;
+			if (posXnino < -125.0f)
+				posXnino += 2.0f;
+			else
+				estadosnino = 2;
+			break;
+		case 2:
+			rotanino = 20.0f;
+			if (posXnino < 120.0f and posZnino > -30 ) 
+			{
+				posXnino += 1.5f;
+				posZnino -= 0.6f;
+			}
+			else
+				estadosnino = 3;
+			break;
+
+		case 3:
+			rotanino = 0.0f;
+			if (posXnino < 332.0f ) {
+				posXnino += 1.5f;
+			}
+			else
+				estadosnino = 4;
+			break;
+
+		case 4:
+			rotanino = 90.0f;
+			if (posZnino > -334.0f) {
+				posZnino -= 1.5f;
+			}
+			else
+				estadosnino = 5;
+			break;
+
+		case 5:
+			rotanino = 180.0f;
+			if (posXnino > 30.0f) {
+				posXnino -= 1.5f;
+			}
+			else
+				estadosnino = 6;
+			break;
+
+		case 6:
+			rotanino = 270.0f;
+			if (posZnino < -40.0f) {
+				posZnino += 1.5f;
+			}
+			else
+				estadosnino = 7;
+			break;
+
+		case 7:
+			rotanino = 200.0f;
+			if (posXnino > -130.0f and posZnino < 195) {
+				posXnino -= 1.5f;
+				posZnino += 0.6f;
+			}
+			else
+				estadosnino = 8;
+			break;
+
+		case 8:
+			rotanino = 180.0f;
+			if (posXnino > -342.0f) {
+				posXnino -= 1.5f;
+			}
+			else
+				estadosnino = 9;
+			break;
+
+		case 9:
+			rotanino = 270.0f;
+			if (posZnino < 62.0f) {
+				posZnino += 1.5f;
+			}
+			else
+				estadosnino = 1;
+			break;
+		
+		default:
+			break;
+		}
+	}
+	movenino = glm::vec3(posXnino, 0.0f, posZnino);
+}
+
+
 int main() {
 	glfwInit();
 
@@ -627,6 +727,7 @@ int main() {
 	Model nube_M("resources/objects/nube/Nube.obj");
 	Model anuncio_M("resources/objects/anuncio/anuncio.obj");
 	Model pina_M("resources/objects/anuncio/pina.obj");
+	Model patinetanino_M("resources/objects/nino/ninopatineta.obj");
 	//Model arbol1_M("resources/objects/plantas/OC13_Howea_forsteriana_Kentia_Palm/arbol1.obj");
 
 	ModelAnim personaje("resources/objects/Personaje/Walking.dae");
@@ -679,6 +780,7 @@ int main() {
 		animacionCarro();
 		animatecolumpio();
 		animatepin();
+		animatenino();
 
 
 
@@ -851,7 +953,7 @@ int main() {
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		calleBanqueta_M.Draw(staticShader);
-
+		
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -967,7 +1069,7 @@ int main() {
 		staticShader.setMat4("model", model);
 		asientocolumpio_M.Draw(staticShader);
 
-		/*Palmeras
+		Palmeras
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -985,7 +1087,7 @@ int main() {
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		allpalmeras3_M.Draw(staticShader);
-		*/
+		
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(-101.0f, 0.0f, 270.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(rotaciondoor1), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -1010,11 +1112,20 @@ int main() {
 		staticShader.setMat4("model", model);
 		pina_M.Draw(staticShader);
 
+		model = glm::translate(glm::mat4(1.0f), glm::vec3(movenino));
+		model = glm::scale(model, glm::vec3(0.2f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(rotanino), glm::vec3(0.0f, 1.0f, 0.0f));
+		staticShader.setMat4("model", model);
+		patinetanino_M.Draw(staticShader);
+
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f + movNube_x, 180.0f, 0.0f + movNube_z));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		nube_M.Draw(staticShader);
+
+		
 
 		/*Palmera prueba
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -1124,11 +1235,20 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
 	//Animacion columpio
 	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
 		banderaswing = 1;
-
+	
+	//Prender y apagar luces
 	if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS)
 		Noche2 = 1.0f; //Prende el foco de las piscina
 	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
 		Noche2 = 0.0f; //Apaga el foco de la piscina
+	
+	//Niño en patineta
+	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+		estadosnino = 1; //Activa
+	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+		estadosnino = 0; //Apaga
+		
+
 
 	if (key == GLFW_KEY_I && action == GLFW_PRESS) {
 		if (play == false && (FrameIndex > 1)) {
