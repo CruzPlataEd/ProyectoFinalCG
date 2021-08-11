@@ -69,6 +69,7 @@ double deltaTime = 0.0f,
 //Lighting
 float Noche = 1.0f;
 float Noche2 = 0.0f;
+//float Noche3 = 0.0f;
 glm::vec3 lightPosition(0.0f, 4.0f, -10.0f);
 glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
 glm::vec3 posicionCarro(0.0f, 0.0f, 0.0f);
