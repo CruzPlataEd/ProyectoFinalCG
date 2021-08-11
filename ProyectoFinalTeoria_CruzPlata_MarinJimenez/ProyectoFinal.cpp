@@ -21,10 +21,12 @@
 #include <model.h>
 #include <Skybox.h>
 #include <iostream>
+#include <irrKlang.h> 
 
-using namespace std;
+using namespace irrklang;
 
 //#pragma comment(lib, "winmm.lib")
+#pragma comment(lib, "irrKlang.lib")
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -237,15 +239,12 @@ void cambioCamara(void) {
 
 void animate(void) {
 	//Cuando la luz va de 0 a 1.5 vamos a tener la bandera de true, la luz ira incrementando de 0.0005 en 0.0005
-	if (tiempoLuz == 0.0f) {
-		PlaySound("night2.wav", NULL, SND_SYNC);
-	}
+	
 	if (tiempoLuz >= 0.0f and tiempoLuz < 1.5f and bandera == true) {
 		tiempoLuz += 0.001f;
 		//Cuando la variable tiempoLuz sea igual a 1.2 el skybox va a cambiar
 		if (tiempoLuz >= 1.2f) {
 			if (cambiobox != 1) {
-				PlaySound("night2.wav", NULL, SND_SYNC);
 				cambiobox = 1; //Dia
 			}
 			Noche = 0.0f;
@@ -262,7 +261,6 @@ void animate(void) {
 		//Cuando la variable sea 0.7 el skybox cambiará a la noche
 		if (tiempoLuz <= 0.7f) {
 			if (cambiobox != 2) {
-				PlaySound("night2.wav", NULL, SND_SYNC);
 				cambiobox = 2; //Noche
 			}
 			Noche = 1.0f;
@@ -504,6 +502,7 @@ void animatepin(void) {
 }
 
 int main() {
+
 	glfwInit();
 
 #ifdef __APPLE__
@@ -541,6 +540,15 @@ int main() {
 	// configure global opengl state
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
+
+
+
+	/*ISoundEngine* engine = createIrrKlangDevice();
+	if (!engine)
+		return 0;
+	ISound* ambiental = engine->play2D("aves_16.mp3", true);*/
+	
+
 
 	// build and compile shaders
 	// -------------------------
