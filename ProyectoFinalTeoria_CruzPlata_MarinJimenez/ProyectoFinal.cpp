@@ -20,9 +20,11 @@
 #include <modelAnim.h>
 #include <model.h>
 #include <Skybox.h>
-#include <iostream>
-//#include <irrKlang.h>
 
+#include <iostream>
+#include <irrKlang.h>
+
+using namespace irrklang;
 using namespace std;
 
 //#pragma comment(lib, "winmm.lib")
@@ -122,6 +124,9 @@ float posXnino = -342.0f;
 float posZnino = 62.0f;
 float rotanino = 0.0f;
 glm::vec3 movenino = glm::vec3(0.0f, 0.0f, 0.0f);
+
+//Sonido
+bool banderasonido = false;
 
 //Keyframes (Manipulación y dibujo)
 float movNube_x = 0.0f;
@@ -523,8 +528,7 @@ void animatenino(void) {
 			break;
 		case 2:
 			rotanino = 20.0f;
-			if (posXnino < 120.0f and posZnino > -30 ) 
-			{
+			if (posXnino < 120.0f and posZnino > -30) {
 				posXnino += 1.5f;
 				posZnino -= 0.6f;
 			}
@@ -534,7 +538,7 @@ void animatenino(void) {
 
 		case 3:
 			rotanino = 0.0f;
-			if (posXnino < 332.0f ) {
+			if (posXnino < 332.0f) {
 				posXnino += 1.5f;
 			}
 			else
@@ -595,7 +599,7 @@ void animatenino(void) {
 			else
 				estadosnino = 1;
 			break;
-		
+
 		default:
 			break;
 		}
@@ -606,6 +610,16 @@ void animatenino(void) {
 
 int main() {
 	glfwInit();
+	ISoundEngine* engine = createIrrKlangDevice();
+	ISound* engine2 = createIrrKlangDevice();
+	
+	if (!engine) {
+		printf("No se puede reproducir el motor de audio\n");
+		return 0;
+	}
+	engine->play2D("sonido.mp3", true);
+	engine2->play2D("sonidopuerta.mp3", true);
+	
 
 #ifdef __APPLE__
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -785,6 +799,7 @@ int main() {
 
 
 
+
 		// per-frame time logic
 		// --------------------
 		lastFrame = SDL_GetTicks();
@@ -954,7 +969,7 @@ int main() {
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		calleBanqueta_M.Draw(staticShader);
-		
+
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -1126,7 +1141,7 @@ int main() {
 		staticShader.setMat4("model", model);
 		nube_M.Draw(staticShader);
 
-		
+
 
 		/*Palmera prueba
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -1230,25 +1245,29 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
 	//Animacion abrir y cerrar puerta
 	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
 		banderadoor = true;
+		//banderasonido = true;
+		
+
 	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
 		banderadoor = false;
+		
 
 	//Animacion columpio
 	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
 		banderaswing = 1;
-	
+
 	//Prender y apagar luces
 	if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS)
 		Noche2 = 1.0f; //Prende el foco de las piscina
 	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
 		Noche2 = 0.0f; //Apaga el foco de la piscina
-	
+
 	//Niño en patineta
 	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
 		estadosnino = 1; //Activa
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
 		estadosnino = 0; //Apaga
-		
+
 
 
 	if (key == GLFW_KEY_I && action == GLFW_PRESS) {
