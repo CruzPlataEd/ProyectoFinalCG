@@ -71,7 +71,8 @@ double deltaTime = 0.0f,
 //Lighting
 float Noche = 1.0f;
 float Noche2 = 0.0f;
-//float Noche3 = 0.0f;
+glm::vec3 Noche3 = glm::vec3(0.0f, 0.0f, 0.0f);
+
 glm::vec3 lightPosition(0.0f, 4.0f, -10.0f);
 glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
 glm::vec3 posicionCarro(0.0f, 0.0f, 0.0f);
@@ -127,6 +128,12 @@ glm::vec3 movenino = glm::vec3(0.0f, 0.0f, 0.0f);
 
 //Sonido
 bool banderasonido = false;
+
+//Variables de luz
+//int estadosluz = 1;
+float luz1 = 0.0f;
+float luz2 = 0.0f;
+float luz3 = 0.0f;
 
 //Keyframes (Manipulación y dibujo)
 float movNube_x = 0.0f;
@@ -608,18 +615,35 @@ void animatenino(void) {
 }
 
 
+void showluz(void) 
+{
+	if (luz1 < 1.0f and luz2 < 1.0f and luz3 < 1.0f) {
+		luz1 += 0.1f;
+		luz2 += 0.2f;
+		luz3 += 0.3f;
+	}
+	if (luz1 > 0.0f and luz2 > 0.0f and luz3 > 0.0f) 
+	{
+		luz1 -= 0.1f;
+		luz2 -= 0.2f;
+		luz3 -= 0.3f;
+	}
+	Noche3 = glm::vec3(luz1, luz2, luz3);
+}
+
+
 int main() {
 	glfwInit();
 	ISoundEngine* engine = createIrrKlangDevice();
-	ISound* engine2 = createIrrKlangDevice();
+	//ISound* engine2 = createIrrKlangDevice();
 	
 	if (!engine) {
 		printf("No se puede reproducir el motor de audio\n");
 		return 0;
 	}
 	engine->play2D("sonido.mp3", true);
-	engine2->play2D("sonidopuerta.mp3", true);
-	
+	//engine2->play2D("sonidopuerta.mp3", true);
+	//engine.newtrack("sonidopuerta.mp3");
 
 #ifdef __APPLE__
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -852,8 +876,8 @@ int main() {
 		staticShader.setFloat("pointLight[4].quadratic", 0.0012f); // intensidad de la luz
 
 		staticShader.setVec3("pointLight[5].position", glm::vec3(-204.98f, 60.0f, 7.5526f));
-		staticShader.setVec3("pointLight[5].ambient", glm::vec3(Noche));
-		staticShader.setVec3("pointLight[5].diffuse", glm::vec3(Noche));
+		staticShader.setVec3("pointLight[5].ambient", glm::vec3(Noche3));
+		staticShader.setVec3("pointLight[5].diffuse", glm::vec3(Noche3));
 		staticShader.setFloat("pointLight[5].constant", 0.002f);
 		staticShader.setFloat("pointLight[5].quadratic", 0.0012f); // intensidad de la luz
 
@@ -1141,8 +1165,6 @@ int main() {
 		staticShader.setMat4("model", model);
 		nube_M.Draw(staticShader);
 
-
-
 		/*Palmera prueba
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
@@ -1246,12 +1268,9 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
 	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
 		banderadoor = true;
 		//banderasonido = true;
-		
-
 	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
 		banderadoor = false;
 		
-
 	//Animacion columpio
 	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
 		banderaswing = 1;
@@ -1268,7 +1287,12 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
 		estadosnino = 0; //Apaga
 
-
+	//Showluz
+	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
+		showluz();
+		
+	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
+		Noche3 = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	if (key == GLFW_KEY_I && action == GLFW_PRESS) {
 		if (play == false && (FrameIndex > 1)) {
