@@ -662,14 +662,14 @@ void showluz(void) {
 int main() {
 
 	glfwInit();
-	/*ISoundEngine* engine = createIrrKlangDevice();
+	ISoundEngine* engine = createIrrKlangDevice();
 	//ISound* engine2 = createIrrKlangDevice();
 	
 	if (!engine) {
 		printf("No se puede reproducir el motor de audio\n");
 		return 0;
 	}
-	engine->play2D("sonido.mp3", true);*/
+	engine->play2D("sonido.mp3", true);
 	//engine2->play2D("sonidopuerta.mp3", true);
 	//engine.newtrack("sonidopuerta.mp3");
 
