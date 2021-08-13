@@ -20,10 +20,12 @@
 #include <modelAnim.h>
 #include <model.h>
 #include <Skybox.h>
+
 #include <iostream>
-#include <irrKlang.h> 
+#include <irrKlang.h>
 
 using namespace irrklang;
+using namespace std;
 
 //#pragma comment(lib, "winmm.lib")
 #pragma comment(lib, "irrKlang.lib")
@@ -52,6 +54,8 @@ float rotacion = 180.0f; //Es la variable para rotar al personaje
 float PosX = 0.0f;		 // Sirve para mover al personaje cuando presionamos una tecla
 float PosY = 450.0f;
 
+int playShow = 0;
+int bandera2 = 0;
 
 // camera
 Camera camera(glm::vec3(CamaraX, CamaraY, CamaraZ));
@@ -70,7 +74,8 @@ double deltaTime = 0.0f,
 //Lighting
 float Noche = 1.0f;
 float Noche2 = 0.0f;
-//float Noche3 = 0.0f;
+glm::vec3 Noche3 = glm::vec3(0.0f, 0.0f, 0.0f);
+
 glm::vec3 lightPosition(0.0f, 4.0f, -10.0f);
 glm::vec3 lightDirection(0.0f, -1.0f, -1.0f);
 glm::vec3 posicionCarro(0.0f, 0.0f, 0.0f);
@@ -123,6 +128,15 @@ float posXnino = -342.0f;
 float posZnino = 62.0f;
 float rotanino = 0.0f;
 glm::vec3 movenino = glm::vec3(0.0f, 0.0f, 0.0f);
+
+//Sonido
+bool banderasonido = false;
+
+//Variables de luz
+//int estadosluz = 1;
+float luz1 = 0.0f;
+float luz2 = 0.0f;
+float luz3 = 0.0f;
 
 //Keyframes (Manipulación y dibujo)
 float movNube_x = 0.0f;
@@ -525,8 +539,7 @@ void animatenino(void) {
 			break;
 		case 2:
 			rotanino = 20.0f;
-			if (posXnino < 120.0f and posZnino > -30 ) 
-			{
+			if (posXnino < 120.0f and posZnino > -30) {
 				posXnino += 1.5f;
 				posZnino -= 0.6f;
 			}
@@ -536,7 +549,7 @@ void animatenino(void) {
 
 		case 3:
 			rotanino = 0.0f;
-			if (posXnino < 332.0f ) {
+			if (posXnino < 332.0f) {
 				posXnino += 1.5f;
 			}
 			else
@@ -597,7 +610,7 @@ void animatenino(void) {
 			else
 				estadosnino = 1;
 			break;
-		
+
 		default:
 			break;
 		}
@@ -606,9 +619,59 @@ void animatenino(void) {
 }
 
 
+void showluz(void) {
+	if (playShow == 1) {
+		if (bandera2==0) {
+			if (luz1 < 1.0f)
+				luz1 += 0.1f;
+			if (luz2 < 1.0f)
+				luz2 += 0.2f;
+			if (luz3 < 1.0f)
+				luz3 += 0.3f;
+			if (luz1 >= 1 or luz2 >= 1 or luz3 >= 1) {
+				luz1 -= 0.1f;
+				luz2 -= 0.2f;
+				luz3 -= 0.3f;
+				bandera2 = 1;
+			}
+		}
+		if (bandera2 == 1) {
+			if (luz1 < 1.0f)
+				luz1 -= 0.1f;
+			if (luz2 < 1.0f)
+				luz2 -= 0.2f;
+			if (luz3 < 1.0f)
+				luz3 -= 0.3f;
+			if (luz1 <= 0 or luz2 <= 0 or luz3 <= 0) {
+				luz1 += 0.1f;
+				luz2 += 0.2f;
+				luz3 += 0.3f;
+				bandera2 = 0;
+			}
+		}
+	}
+	if (playShow == 0) {
+		luz1 = 0.0f;
+		luz2 = 0.0f;
+		luz3 = 0.0f;
+	}
+	//Noche3 = glm::vec3(luz1, luz2, luz3);
+}
+
+
 int main() {
 
 	glfwInit();
+	/*ISoundEngine* engine = createIrrKlangDevice();
+	//ISound* engine2 = createIrrKlangDevice();
+	
+	if (!engine) {
+		printf("No se puede reproducir el motor de audio\n");
+		return 0;
+	}
+	engine->play2D("sonido.mp3", true);*/
+	//engine2->play2D("sonidopuerta.mp3", true);
+	//engine.newtrack("sonidopuerta.mp3");
 
 #ifdef __APPLE__
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -645,14 +708,6 @@ int main() {
 	// configure global opengl state
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
-
-
-
-	ISoundEngine* engine = createIrrKlangDevice();
-	if (!engine)
-		return 0;
-	ISound* ambiental = engine->play2D("aves_16.mp3", true);
-	
 
 
 	// build and compile shaders
@@ -794,6 +849,8 @@ int main() {
 		animatecolumpio();
 		animatepin();
 		animatenino();
+		showluz();
+
 
 
 
@@ -849,8 +906,8 @@ int main() {
 		staticShader.setFloat("pointLight[4].quadratic", 0.0012f); // intensidad de la luz
 
 		staticShader.setVec3("pointLight[5].position", glm::vec3(-204.98f, 60.0f, 7.5526f));
-		staticShader.setVec3("pointLight[5].ambient", glm::vec3(Noche));
-		staticShader.setVec3("pointLight[5].diffuse", glm::vec3(Noche));
+		staticShader.setVec3("pointLight[5].ambient", glm::vec3(luz1, luz2, luz3));
+		staticShader.setVec3("pointLight[5].diffuse", glm::vec3(luz1, luz2, luz3));
 		staticShader.setFloat("pointLight[5].constant", 0.002f);
 		staticShader.setFloat("pointLight[5].quadratic", 0.0012f); // intensidad de la luz
 
@@ -966,7 +1023,7 @@ int main() {
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		staticShader.setMat4("model", model);
 		calleBanqueta_M.Draw(staticShader);
-		
+
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -1138,8 +1195,6 @@ int main() {
 		staticShader.setMat4("model", model);
 		nube_M.Draw(staticShader);
 
-		
-
 		/*Palmera prueba
 		model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.2f));
@@ -1242,26 +1297,33 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
 	//Animacion abrir y cerrar puerta
 	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
 		banderadoor = true;
+	//banderasonido = true;
 	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
 		banderadoor = false;
 
 	//Animacion columpio
 	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
 		banderaswing = 1;
-	
+
 	//Prender y apagar luces
 	if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS)
 		Noche2 = 1.0f; //Prende el foco de las piscina
 	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
 		Noche2 = 0.0f; //Apaga el foco de la piscina
-	
+
 	//Niño en patineta
 	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
 		estadosnino = 1; //Activa
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
 		estadosnino = 0; //Apaga
-		
 
+	//Showluz
+	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
+		playShow = 1;
+
+	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
+		playShow = 0;
+	}
 
 	if (key == GLFW_KEY_I && action == GLFW_PRESS) {
 		if (play == false && (FrameIndex > 1)) {
